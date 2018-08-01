@@ -21,7 +21,8 @@ import os.path
 import pytest
 
 from basic_modules.metadata import Metadata
-from tool import bwa_indexer
+from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
+from mg_process_fastq.tool.bowtie_indexer import bowtieIndexerTool
 from atac_seq.tool.atac_seq import atacSeqTool
 
 
@@ -45,8 +46,8 @@ def test_atac_seq():
     files_out = {
             "narrow_peak": resource_path + "atacseq.Human.ERR1659027_peaks.narrowPeak",
             "summits": resource_path + "atacseq.Human.ERR1659027_peaks.summits.bed",
-            #"broad_peak": resource_path + "atacseq.Human.ERR1659027_peaks.broadPeak",
-            #"gapped_peak": resource_path + "atacseq.Human.ERR1659027_peaks.gappedPeak"
+            "broad_peak": resource_path + "atacseq.Human.ERR1659027_peaks.broadPeak",
+            "gapped_peak": resource_path + "atacseq.Human.ERR1659027_peaks.gappedPeak"
     }
 
     atac_handle = atacSeqTool()

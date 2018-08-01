@@ -41,10 +41,10 @@ except ImportError:
 from basic_modules.metadata import Metadata
 from basic_modules.tool import Tool
 
-from tool.aligner_utils import alignerUtils
-from tool.bowtie_indexer import bowtieIndexerTool
-from tool.bowtie_aligner import bowtie2AlignerTool
-from tool.macs2 import macs2
+from mg_process_fastq.tool.aligner_utils import alignerUtils
+from mg_process_fastq.tool.bowtie_indexer import bowtieIndexerTool
+from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
+from mg_process_fastq.tool.macs2 import macs2
 
 
 # ------------------------------------------------------------------------------
@@ -74,7 +74,8 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
         self.configuration.update(configuration)
 
     @task(genome_file=FILE_IN, index_loc=FILE_OUT)
-    def atac_seq(self, genome_file, input_fastq1, input_fastq2, output_narrowpeak, output_summits):  # pylint: disable=unused-argument, no-self-use
+    def atac_seq(self, genome_file, input_fastq1, input_fastq2, output_narrowpeak, output_summits,
+                 output_broadpeak, output_gappedpeak):  # pylint: disable=unused-argument, no-self-use
         """
         Atac Seq
 
@@ -194,14 +195,14 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
         resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
         input_files = {
-            "bam": resource_path + bam_file
+            "bam": bam_file
         }
     
         output_files = {
-            "narrow_peak": resource_path + "atacseq.Human.ERR1659027_peaks.narrowPeak",
-            "summits": resource_path + "atacseq.Human.ERR1659027_peaks.summits.bed",
-            #"broad_peak": resource_path + "atacseq.Human.ERR1659027_peaks.broadPeak",
-            #"gapped_peak": resource_path + "atacseq.Human.ERR1659027_peaks.gappedPeak"
+            "narrow_peak": output_narrowpeak,
+            "summits": output_summits,
+            "broad_peak": output_broadpeak,
+            "gapped_peak": output_gappedpeak
         }
     
         metadata = {
@@ -209,7 +210,11 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
                 "data_atacseq", "fastq", [], None,
                 {'assembly' : 'test'}),
         }
-    
+
+        print("BAM FILE :", resource_path + bam_file)    
+        print("Output_files :",output_files["narrow_peak"])    
+        print("output_narrowPeak :", output_narrowpeak)    
+        
         macs_handle = macs2({"macs_nomodel_param": True})
         macs_handle.run(input_files, metadata, output_files)
 
@@ -248,8 +253,12 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
             input_files['fastq1'],
             input_files['fastq2'],
             output_files['narrow_peak'],
-            output_files['summits']
+            output_files['summits'],
+            output_files['broad_peak'],
+            output_files['gapped_peak']
         )
+        
+        print("Summits file: ", output_files["summits"])
         
         results = compss_wait_on(results)
 
@@ -265,8 +274,8 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
                 data_type="atacseq",
                 file_type="narrowpeak",
                 file_path=output_files["narrow_peak"],
-                sources=[input_metadata["narrowpeak"].file_path],
-                taxon_id=input_metadata["narrowpeak"].taxon_id,
+                #sources=[input_metadata["narrowpeak"].file_path],
+                #taxon_id=input_metadata["narrowpeak"].taxon_id,
                 meta_data={
                     "tool": "atac_seq"
                 }
@@ -276,8 +285,8 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
                 data_type="atacseq",
                 file_type="summits",
                 file_path=output_files["summits"],
-                sources=[input_metadata["summits"].file_path],
-                taxon_id=input_metadata["summits"].taxon_id,
+                #sources=[input_metadata["summits"].file_path],
+                #taxon_id=input_metadata["summits"].taxon_id,
                 meta_data={
                     "tool": "atac_seq"
                 }
