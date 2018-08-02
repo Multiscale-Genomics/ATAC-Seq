@@ -44,6 +44,7 @@ from basic_modules.tool import Tool
 from mg_process_fastq.tool.aligner_utils import alignerUtils
 from mg_process_fastq.tool.bowtie_indexer import bowtieIndexerTool
 from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
+from mg_process_fastq.tool.biobambam_filter import biobambam
 from mg_process_fastq.tool.macs2 import macs2
 
 
@@ -204,7 +205,25 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
 #            logger.fatal("I/O error({0}) - Atac-Seq alignment: {1}\n{2}".format(
 #                msg.errno, msg.strerror, command_line))
 #            return False
-        
+
+        bam_filtered = bam_file.replace("sorted","filtered")     
+        input_files = {
+            "input": bam_file
+        }
+
+        output_files = {
+            "output": bam_filtered
+        }
+
+        metadata = {
+            "input": Metadata(
+                "data_chipseq", "fastq", [], None,
+                {'assembly' : 'test'}),
+        }
+
+        bbb = biobambam()
+        bbb.run(input_files, metadata, output_files)
+
         """
         Make bed file
         
@@ -229,20 +248,18 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
         """
         Call peaks with macs2
         """
-        
-        resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
         input_files = {
-            "bam": bam_file
+            "bam": bam_filtered
         }
-    
+
         output_files = {
             "narrow_peak": output_narrowpeak,
             "summits": output_summits,
             "broad_peak": output_broadpeak,
             "gapped_peak": output_gappedpeak
         }
-    
+
         metadata = {
             "bam": Metadata(
                 "data_atacseq", "fastq", [], None,
@@ -252,12 +269,12 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
         print("BAM FILE :", resource_path + bam_file)    
         print("Output_files :",output_files["narrow_peak"])    
         print("output_narrowPeak :", output_narrowpeak)    
-        
+
         macs_handle = macs2({"macs_nomodel_param": True})
         macs_handle.run(input_files, metadata, output_files)
 
         return True
-        
+
 
     def run(self, input_files, input_metadata, output_files):
         """
