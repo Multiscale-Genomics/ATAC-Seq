@@ -149,23 +149,61 @@ class atacSeqTool(Tool):  # pylint: disable=invalid-name
 
         command_line = "bowtie2-build " + genome_file + " " + index_file 
         logger.info("Atac-Seq, bowtie2-build: command_line: " + command_line)
+        
+        resource_path = os.path.join(os.path.dirname(__file__), "data/")
+        genome_fa = resource_path + "bsSeeker.Mouse.GRCm38.fasta"
+
+        fastq_file_1 = input_fastq1 #+".trimmed"
+        fastq_file_2 = input_fastq2 #+".trimmed"
+
+        input_files = {
+            "genome": genome_fa,
+            "index": genome_fa + ".bt2.tar.gz",
+            "loc": fastq_file_1,
+            "fastq2": fastq_file_2
+        }
+
+        output_files = {
+            "output": fastq_file_1.replace(".fastq", "_bt2.bam")
+        }
+
+        metadata = {
+            "genome": Metadata(
+                "Assembly", "fasta", genome_fa, None,
+                {"assembly": "test"}),
+            "index": Metadata(
+                "index_bwa", "", [genome_fa],
+                {
+                    "assembly": "test",
+                    "tool": "bwa_indexer"
+                }
+            ),
+            "loc": Metadata(
+                "data_wgbs", "fastq", fastq_file_1, None,
+                {"assembly": "test"}
+            ),
+            "fastq2": Metadata(
+                "data_wgbs", "fastq", fastq_file_2, None,
+                {"assembly": "test"}
+            )
+        }
+
+        bowtie2_handle = bowtie2AlignerTool()
+        bowtie2_handle.run(input_files, metadata, output_files)
 
 
-        command_line = "bowtie2 -x " +  index_file + " "
-        command_line += "-1 " + (input_fastq1 +".trimmed ") + " "
-        command_line += "-2 " + (input_fastq2 +".trimmed ") + " "
         bam_file = input_fastq1.replace("_1.fastq",".sorted.bam")
-        command_line += " | samtools view -u - | samtools sort - >" + bam_file
-        logger.info("Atac-Seq alignment: command_line: " + command_line)
+#        command_line += " | samtools view -u - | samtools sort - >" + bam_file
+#        logger.info("Atac-Seq alignment: command_line: " + command_line)
 
-        try:
-            args = shlex.split(command_line)
-            process = subprocess.Popen(args)
-            process.wait()
-        except (IOError, OSError) as msg:
-            logger.fatal("I/O error({0}) - Atac-Seq alignment: {1}\n{2}".format(
-                msg.errno, msg.strerror, command_line))
-            return False
+#        try:
+#            args = shlex.split(command_line)
+#            process = subprocess.Popen(args)
+#            process.wait()
+#        except (IOError, OSError) as msg:
+#            logger.fatal("I/O error({0}) - Atac-Seq alignment: {1}\n{2}".format(
+#                msg.errno, msg.strerror, command_line))
+#            return False
         
         """
         Make bed file
