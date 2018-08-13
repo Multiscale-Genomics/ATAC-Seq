@@ -18,7 +18,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='mg_process_test',
+    name='ATAC-Seq',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -30,4 +30,9 @@ setup(
     tests_require=[
         'pytest',
     ],
+    classifiers=[
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.6",
+        "License :: OSI Approved :: Apache 2.0",
+    ]
 )
