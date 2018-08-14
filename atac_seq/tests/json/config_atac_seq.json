@@ -1,0 +1,80 @@
+{
+    "input_files": [
+        {
+            "required": true,
+            "allow_multiple": false,
+            "name": "fastq1",
+            "value": "59b7e020d9422a5969b65478"
+        },
+        {
+            "required": false,
+            "allow_multiple": false,
+            "name": "fastq2",
+            "value": "59b7e020d9422a5969b65479"
+        }
+    ],
+    "arguments": [],
+    "output_files": [
+        {
+            "required": false,
+            "allow_multiple": false,
+            "name": "narrow_peak",
+            "file": {
+                "file_type": "bed",
+                "meta_data": {
+                    "visible": true,
+                    "tool": "macs2",
+                    "description": "Output"
+                },
+                "file_path": "tests/data/atacseq.Human.ERR1659027_peaks.narrowPeak",
+                "data_type": "data_atac_seq",
+                "compressed": "null"
+            }
+        }, {
+            "required": false,
+            "allow_multiple": false,
+            "name": "summits",
+            "file": {
+                "file_type": "bed",
+                "meta_data": {
+                    "visible": true,
+                    "tool": "macs2",
+                    "description": "Output"
+                },
+                "file_path": "tests/data/atacseq.Human.ERR1659027_peaks.summits.bed",
+                "data_type": "data_atac_seq",
+                "compressed": "null"
+            }
+        }, {
+            "required": false,
+            "allow_multiple": false,
+            "name": "broad_peak",
+            "file": {
+                "file_type": "bed",
+                "meta_data": {
+                    "visible": true,
+                    "tool": "macs2",
+                    "description": "Output"
+                },
+                "file_path": "tests/data/atacseq.Human.ERR1659027_peaks.broadPeak",
+                "data_type": "data_atac_seq",
+                "compressed": "null"
+            }
+        }, {
+            "required": false,
+            "allow_multiple": false,
+            "name": "gapped_peak",
+            "file": {
+                "file_type": "bed",
+                "meta_data": {
+                    "visible": true,
+                    "tool": "macs2",
+                    "description": "Output"
+                },
+                "file_path": "tests/data/atacseq.Human.ERR1659027_peaks.gappedPeak",
+                "data_type": "data_atac_seq",
+                "compressed": "null"
+            }
+        }
+    ]
+}

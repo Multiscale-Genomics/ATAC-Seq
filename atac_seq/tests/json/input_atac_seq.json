@@ -1,0 +1,26 @@
+[
+    {
+        "compressed": 0,
+        "_id": "59b7e020d9422a5969b65478",
+        "data_type": "data_atac",
+        "file_type": "fastq1",
+        "file_path": "tests/data/atac.Human.ERR1659027_1.fastq",
+        "sources": [],
+        "taxon_id": 9606,
+        "meta_data": {
+            "visible": true
+        }
+    },
+    {
+        "compressed": 0,
+        "_id": "59b7e020d9422a5969b65479",
+        "data_type": "data_atac",
+        "file_type": "fastq2",
+        "file_path": "tests/data/atac.Human.ERR1659027_2.fastq",
+        "sources": [],
+        "taxon_id": 9606,
+        "meta_data": {
+            "visible": true
+        }
+    }
+]
