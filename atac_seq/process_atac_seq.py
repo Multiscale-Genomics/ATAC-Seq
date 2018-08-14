@@ -297,7 +297,10 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
         print("Output_files :", output_files["narrow_peak"])
         print("output_narrowPeak :", output_narrowpeak)
 
-        macs_handle = macs2({"macs_nomodel_param": True})
+        self.configuration["macs_nomodel_param"] = True
+        self.configuration["macs_keep-dup_param"] = "all"
+
+        macs_handle = macs2(self.configuration)
         macs_handle.run(input_files, metadata, output_files)
 
         print("Summits file: ", output_files["summits"])
@@ -331,7 +334,6 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
                 }
             )
         }
-
 
         return (output_files, output_metadata)
 

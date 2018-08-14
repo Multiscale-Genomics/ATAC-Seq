@@ -52,4 +52,3 @@ def test_atac_seq():
 
     atac_handle = atacSeq()
     atac_handle.run(files, metadata, files_out)
-
