@@ -102,15 +102,15 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
 
         genome_file = input_files['genome']
         input_fastq1 = input_files['fastq1']
-        
+
         if "fastq2" in input_files:
             input_fastq2 = input_files['fastq2']
         output_narrowpeak = output_files['narrow_peak']
         output_summits = output_files['summits']
         output_broadpeak = output_files['broad_peak']
         output_gappedpeak = output_files['gapped_peak']
-        
-        """ 
+
+        """
             genome_file : str
                 Location of the genome assembly FASTA file
             input_fastq1 : str
@@ -118,7 +118,7 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
             input_fastq2 : str
                 Location of the fastq file 2
             output_narrowpeak : str
-                Location of the narrow peak output file        
+                Location of the narrow peak output file
             output_summits : str
                 Location of the summits.bed output file
             output_broadpeak : str
@@ -155,7 +155,7 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
                 "fastq2_report": 'tests/data/bsSeeker.Mouse.SRR892982_2.trimmed.report.txt'
             }
 
-        else: 
+        else:
             files = {
                 'fastq1': input_fastq1
             }
@@ -188,11 +188,11 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
         resource_path = os.path.join(os.path.dirname(__file__), "data/")
         genome_fa = resource_path + "bsSeeker.Mouse.GRCm38.fasta"
 
-        fastq_file_1 = input_fastq1 #+".trimmed"
-        
+        fastq_file_1 = input_fastq1
+
         if "fastq2" in input_files:
-            fastq_file_2 = input_fastq2 #+".trimmed"
-    
+            fastq_file_2 = input_fastq2
+
             input_files = {
                 "genome": genome_fa,
                 "index": genome_fa + ".bt2.tar.gz",
