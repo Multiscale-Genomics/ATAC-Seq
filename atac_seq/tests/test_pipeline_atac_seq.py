@@ -36,7 +36,7 @@ def test_atac_seq():
     resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
     files = {
-        'genome': resource_path + 'male.hg19.chr17.fa',
+        'genome': resource_path + 'atac.Human.hg19.fasta',
         'fastq1': resource_path + 'ERR1659027_1.fastq',
         'fastq2': resource_path + 'ERR1659027_2.fastq'
     }
