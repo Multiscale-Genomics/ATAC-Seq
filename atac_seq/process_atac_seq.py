@@ -102,7 +102,9 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
 
         genome_file = input_files['genome']
         input_fastq1 = input_files['fastq1']
-        input_fastq2 = input_files['fastq2']
+        
+        if "fastq2" in input_files:
+            input_fastq2 = input_files['fastq2']
         output_narrowpeak = output_files['narrow_peak']
         output_summits = output_files['summits']
         output_broadpeak = output_files['broad_peak']
@@ -130,27 +132,44 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
         Trim Adapters from fastq files.
         """
 
-        files = {
-            'fastq1': input_fastq1,
-            'fastq2': input_fastq2
-        }
+        if "fastq2" in input_files:
+            files = {
+                'fastq1': input_fastq1,
+                'fastq2': input_fastq2
+            }
 
-        metadata = {
-            "fastq1": Metadata(
-                "data_wgbs", "fastq", files['fastq1'], None,
-            ),
+            metadata = {
+                "fastq1": Metadata(
+                    "data_wgbs", "fastq", files['fastq1'], None,
+                ),
 
-            "fastq2": Metadata(
-                "data_wgbs", "fastq", files['fastq2'], None,
-            )
-        }
+                "fastq2": Metadata(
+                    "data_wgbs", "fastq", files['fastq2'], None,
+                )
+            }
 
-        files_out = {
-            "fastq1_trimmed": input_fastq1 + '.trimmed',
-            "fastq2_trimmed": input_fastq2 + '.trimmed',
-            "fastq1_report": 'tests/data/bsSeeker.Mouse.SRR892982_1.trimmed.report.txt',
-            "fastq2_report": 'tests/data/bsSeeker.Mouse.SRR892982_2.trimmed.report.txt'
-        }
+            files_out = {
+                "fastq1_trimmed": input_fastq1 + '.trimmed',
+                "fastq2_trimmed": input_fastq2 + '.trimmed',
+                "fastq1_report": 'tests/data/bsSeeker.Mouse.SRR892982_1.trimmed.report.txt',
+                "fastq2_report": 'tests/data/bsSeeker.Mouse.SRR892982_2.trimmed.report.txt'
+            }
+
+        else: 
+            files = {
+                'fastq1': input_fastq1
+            }
+
+            metadata = {
+                "fastq1": Metadata(
+                    "data_wgbs", "fastq", files['fastq1'], None,
+                )
+            }
+
+            files_out = {
+                "fastq1_trimmed": input_fastq1 + '.trimmed',
+                "fastq1_report": 'tests/data/bsSeeker.Mouse.SRR892982_1.trimmed.report.txt',
+            }
 
         self.configuration["tg_length"] = "0"
 
@@ -170,38 +189,64 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
         genome_fa = resource_path + "bsSeeker.Mouse.GRCm38.fasta"
 
         fastq_file_1 = input_fastq1 #+".trimmed"
-        fastq_file_2 = input_fastq2 #+".trimmed"
+        
+        if "fastq2" in input_files:
+            fastq_file_2 = input_fastq2 #+".trimmed"
+    
+            input_files = {
+                "genome": genome_fa,
+                "index": genome_fa + ".bt2.tar.gz",
+                "loc": fastq_file_1,
+                "fastq2": fastq_file_2
+            }
 
-        input_files = {
-            "genome": genome_fa,
-            "index": genome_fa + ".bt2.tar.gz",
-            "loc": fastq_file_1,
-            "fastq2": fastq_file_2
-        }
+            metadata = {
+                "genome": Metadata(
+                    "Assembly", "fasta", genome_fa, None,
+                    {"assembly": "test"}),
+                "index": Metadata(
+                    "index_bwa", "", [genome_fa],
+                    {
+                        "assembly": "test",
+                        "tool": "bwa_indexer"
+                    }
+                ),
+                "loc": Metadata(
+                    "data_wgbs", "fastq", fastq_file_1, None,
+                    {"assembly": "test"}
+                ),
+                "fastq2": Metadata(
+                    "data_wgbs", "fastq", fastq_file_2, None,
+                    {"assembly": "test"}
+                )
+            }
+
+        else:
+            input_files = {
+                "genome": genome_fa,
+                "index": genome_fa + ".bt2.tar.gz",
+                "loc": fastq_file_1
+            }
+
+            metadata = {
+                "genome": Metadata(
+                    "Assembly", "fasta", genome_fa, None,
+                    {"assembly": "test"}),
+                "index": Metadata(
+                    "index_bwa", "", [genome_fa],
+                    {
+                        "assembly": "test",
+                        "tool": "bwa_indexer"
+                    }
+                ),
+                "loc": Metadata(
+                    "data_wgbs", "fastq", fastq_file_1, None,
+                    {"assembly": "test"}
+                )
+            }
 
         output_files = {
             "output": fastq_file_1.replace(".fastq", "_bt2.bam")
-        }
-
-        metadata = {
-            "genome": Metadata(
-                "Assembly", "fasta", genome_fa, None,
-                {"assembly": "test"}),
-            "index": Metadata(
-                "index_bwa", "", [genome_fa],
-                {
-                    "assembly": "test",
-                    "tool": "bwa_indexer"
-                }
-            ),
-            "loc": Metadata(
-                "data_wgbs", "fastq", fastq_file_1, None,
-                {"assembly": "test"}
-            ),
-            "fastq2": Metadata(
-                "data_wgbs", "fastq", fastq_file_2, None,
-                {"assembly": "test"}
-            )
         }
 
         bowtie2_handle = bowtie2AlignerTool()
