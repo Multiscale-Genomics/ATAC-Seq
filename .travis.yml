@@ -1,3 +1,18 @@
+# See the NOTICE file distributed with this work for additional information
+# regarding copyright ownership.
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 language: python
 
 os: linux
@@ -12,6 +27,43 @@ env:
         - TESTENV=code
         - TESTENV=pylint
 
+addons:
+    apt:
+        packages:
+            #system environment
+            - make
+            - python-dev
+            - build-essential
+            - libssl-dev
+            - zlib1g-dev
+            - libbz2-dev
+            - libreadline-dev
+            - libsqlite3-dev
+            - libtiff5-dev
+            - libjpeg8-dev
+            - libfreetype6-dev
+            - liblcms2-dev
+            - libwebp-dev
+            - tcl8.6-dev
+            - tk8.6-dev
+            - python-tk
+            - wget
+            - curl
+            - llvm
+            - libncurses5-dev
+            - libncursesw5-dev
+            - xz-utils
+            - tk-dev
+            - mcl
+            - libgtk2.0-dev
+            - libcurl4-gnutls-dev
+            - unzip
+            - liblzma-dev
+            - libtool
+            - pigz
+            - tree
+
+
 # command to install dependencies
 install:
     - pip install .
@@ -21,6 +73,6 @@ install:
 
 # command to run tests
 script:
-    - if [[ "$TESTENV" == "code" ]]; then pytest -m "not underdeverlopment" atac-seq; fi
+    - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/harness.sh; fi
     - if [[ "$TESTENV" == "docs" ]]; then ./scripts/travis/docs_harness.sh; fi
     - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/pylint_harness.sh; fi
