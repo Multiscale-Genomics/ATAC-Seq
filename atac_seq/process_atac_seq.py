@@ -127,6 +127,7 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
                 Location of the gappedpeak output file
         """
         results = {}
+        resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
         """
         Trim Adapters from fastq files.
@@ -151,8 +152,8 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
             files_out = {
                 "fastq1_trimmed": input_fastq1 + '.trimmed',
                 "fastq2_trimmed": input_fastq2 + '.trimmed',
-                "fastq1_report": 'tests/data/bsSeeker.Mouse.SRR892982_1.trimmed.report.txt',
-                "fastq2_report": 'tests/data/bsSeeker.Mouse.SRR892982_2.trimmed.report.txt'
+                "fastq1_report": input_fastq1 + '.trimmed.report.txt',
+                "fastq2_report": input_fastq2 + '.trimmed.report.txt'
             }
 
         else:
@@ -168,7 +169,7 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
 
             files_out = {
                 "fastq1_trimmed": input_fastq1 + '.trimmed',
-                "fastq1_report": 'tests/data/bsSeeker.Mouse.SRR892982_1.trimmed.report.txt',
+                "fastq1_report": input_fastq1 + '.trimmed.report.txt',
             }
 
         self.configuration["tg_length"] = "0"
@@ -185,30 +186,27 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
         elif ".fasta" in genome_file:
             index_file = genome_file.replace("fasta", "idx")
 
-        resource_path = os.path.join(os.path.dirname(__file__), "data/")
-        genome_fa = resource_path + "bsSeeker.Mouse.GRCm38.fasta"
-
         fastq_file_1 = input_fastq1
 
         if "fastq2" in input_files:
             fastq_file_2 = input_fastq2
 
             input_files = {
-                "genome": genome_fa,
-                "index": genome_fa + ".bt2.tar.gz",
+                "genome": genome_file,
+                "index": genome_file + ".bt2.tar.gz",
                 "loc": fastq_file_1,
                 "fastq2": fastq_file_2
             }
 
             metadata = {
                 "genome": Metadata(
-                    "Assembly", "fasta", genome_fa, None,
+                    "Assembly", "fasta", genome_file, None,
                     {"assembly": "test"}),
                 "index": Metadata(
-                    "index_bwa", "", [genome_fa],
+                    "index_bwa", "", [genome_file],
                     {
                         "assembly": "test",
-                        "tool": "bwa_indexer"
+                        "tool": "bowtie_aligner"
                     }
                 ),
                 "loc": Metadata(
@@ -223,20 +221,20 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
 
         else:
             input_files = {
-                "genome": genome_fa,
-                "index": genome_fa + ".bt2.tar.gz",
+                "genome": genome_file,
+                "index": genome_file + ".bt2.tar.gz",
                 "loc": fastq_file_1
             }
 
             metadata = {
                 "genome": Metadata(
-                    "Assembly", "fasta", genome_fa, None,
+                    "Assembly", "fasta", genome_file, None,
                     {"assembly": "test"}),
                 "index": Metadata(
-                    "index_bwa", "", [genome_fa],
+                    "index_bwa", "", [genome_file],
                     {
                         "assembly": "test",
-                        "tool": "bwa_indexer"
+                        "tool": "bowtie_aligner"
                     }
                 ),
                 "loc": Metadata(

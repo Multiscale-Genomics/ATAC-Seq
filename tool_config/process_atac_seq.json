@@ -1,0 +1,162 @@
+{
+  "_id": "process_test",
+  "name": "Process Test",
+  "title": "Test Workflow",
+  "short_description": "Generates file with some text",
+  "owner": {
+    "institution": "EMBL-EBI",
+    "author": "Reham Fatima",
+    "contact": "reham@ebi.ac.uk",
+    "url": "https://github.com/Multiscale-Genomics/ATAC-Seq"
+  },
+  "external": true,
+  "has_custom_viewer": false,
+  "keywords": [
+    "dna"
+  ],
+  "infrastructure": {
+    "memory": 1,
+    "cpus": 1,
+    "executable": "/home/pmes/code/mg-process-test/process_atac_seq.py",
+    "clouds": {
+        "mug-bsc": {
+        "launcher": "PMES",
+        "workflowType": "COMPSs",
+        "default_cloud": true
+        }
+    }
+  },
+  "input_files": [
+      {
+          "name": "fastq1",
+          "description": "Input fastq1 file",
+          "help": "path to the input fastq1 file",
+          "file_type": [".fastq"],
+          "data_type": [
+              "data_atac_seq"
+          ],
+          "required": true,
+          "allow_multiple": false
+      },
+      {
+          "name": "fastq2",
+          "description": "Input fastq2 file",
+          "help": "path to the input fastq2 file",
+          "file_type": [".fastq"],
+          "data_type": [
+              "data_atac_seq"
+          ],
+          "required": true,
+          "allow_multiple": false
+      },
+      {
+          "name": "genome",
+          "description": "Genome sequence file",
+          "help": "path to a assembly sequence file",
+          "file_type": ["FASTA"],
+          "data_type": ["sequence_genomic", "sequence_dna"],
+          "required": true,
+          "allow_multiple": false
+      }
+  ],
+  "arguments": [
+      {
+          "name": "tg_length",
+          "description": "Discard reads that became shorter than length INT because of either quality or adapter trimming",
+          "help": "Discard reads that became shorter than length INT because of either quality or adapter trimming",
+          "type": "int",
+          "required": false,
+          "default": "0",
+          "value": "0"
+      },
+      {
+          "name": "macs_nomodel_param",
+          "description": "No Model",
+          "help": "Negate building shifting models",
+          "type": "boolean",
+          "required": false,
+          "default": "0"
+      },
+      {
+          "name": "macs_keep-dups_param",
+          "description": "Control counting duplicate tags",
+          "help": "Controls for counting of duplicate tags",
+          "type": "string",
+          "required": false,
+          "default": "0"
+      },
+      {
+          "name": "macs_format_param",
+          "description": "Specify the format of the file to macs2 (bampe or bedpe)",
+          "help": "Specify the format of the file to macs2 (bampe or bedpe)",
+          "type": "string",
+          "required": false,
+          "default": "bampe"
+      }
+  ],
+  "output_files": [
+      {
+          "required": false,
+          "allow_multiple": false,
+          "name": "narrow_peak",
+          "file": {
+              "file_type": "bed",
+              "meta_data": {
+                  "visible": true,
+                  "tool": "process_atac_seq",
+                  "description": "Output"
+              },
+              "file_path": "atacseq.Human.ERR1659027_peaks.narrowPeak",
+              "data_type": "data_atac_seq",
+              "compressed": "null"
+          }
+      }, {
+          "required": false,
+          "allow_multiple": false,
+          "name": "summits",
+          "file": {
+              "file_type": "bed",
+              "meta_data": {
+                  "visible": true,
+                  "tool": "process_atac_seq",
+                  "description": "Output"
+              },
+              "file_path": "atacseq.Human.ERR1659027_peaks.summits.bed",
+              "data_type": "data_atac_seq",
+              "compressed": "null"
+          }
+      },
+      {
+          "required": false,
+          "allow_multiple": false,
+          "name": "broad_peak",
+          "file": {
+              "file_type": "bed",
+              "meta_data": {
+                  "visible": true,
+                  "tool": "process_atac_seq",
+                  "description": "Output"
+              },
+              "file_path": "atacseq.Human.ERR1659027_peaks.broadPeak",
+              "data_type": "data_atac_seq",
+              "compressed": "null"
+          }
+      },
+      {
+          "required": false,
+          "allow_multiple": false,
+          "name": "gapped_peak",
+          "file": {
+              "file_type": "bed",
+              "meta_data": {
+                  "visible": true,
+                  "tool": "process_atac_seq",
+                  "description": "Output"
+              },
+              "file_path": "atacseq.Human.ERR1659027_peaks.gappedPeak",
+              "data_type": "data_atac_seq",
+              "compressed": "null"
+          }
+      }
+  ]
+}
