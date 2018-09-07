@@ -23,7 +23,7 @@ import pytest
 from basic_modules.metadata import Metadata
 from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
 from mg_process_fastq.tool.bowtie_indexer import bowtieIndexerTool
-from atac_seq.process_atac_seq import process_atac_seq
+from process_atac_seq import process_atac_seq
 
 
 @pytest.mark.atacseq
