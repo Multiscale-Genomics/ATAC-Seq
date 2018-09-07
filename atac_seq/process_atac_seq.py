@@ -74,7 +74,7 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
 
         self.configuration.update(configuration)
 
-    def run(self, input_files, input_metadata, output_files):
+    def run(self, input_files, input_metadata, output_files, bedpe = False):
         """
         Tool for generating bed and peak files for use with the ATAC-Seq
         data
@@ -297,6 +297,9 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
 
         self.configuration["macs_nomodel_param"] = True
         self.configuration["macs_keep-dup_param"] = "all"
+        
+        if bedpe:
+            self.configuration["macs_format_param"] = "BEDPE"
 
         macs_handle = macs2(self.configuration)
         macs_handle.run(input_files, metadata, output_files)
@@ -336,3 +339,54 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
         return (output_files, output_metadata)
 
 # ------------------------------------------------------------------------------
+
+def main_json(config, in_metadata, out_metadata):
+    """
+    Alternative main function
+    -------------
+
+    This function launches the app using configuration written in
+    two json files: config.json and input_metadata.json.
+    """
+    # 1. Instantiate and launch the App
+    print("1. Instantiate and launch the App")
+    from apps.jsonapp import JSONApp
+    app = JSONApp()
+    result = app.launch(process_atac_seq,
+                        config,
+                        in_metadata,
+                        out_metadata)
+
+    # 2. The App has finished
+    print("2. Execution finished; see " + out_metadata)
+    print(result)
+
+    return result
+
+
+# ------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+
+    # Set up the command line parameters
+    PARSER = argparse.ArgumentParser(description="ATAC-Seq")
+    PARSER.add_argument("--config", help="Configuration file")
+    PARSER.add_argument("--in_metadata", help="Location of input metadata file")
+    PARSER.add_argument("--out_metadata", help="Location of output metadata file")
+    PARSER.add_argument("--local", action="store_const", const=True, default=False)
+
+    # Get the matching parameters from the command line
+    ARGS = PARSER.parse_args()
+
+    CONFIG = ARGS.config
+    IN_METADATA = ARGS.in_metadata
+    OUT_METADATA = ARGS.out_metadata
+    LOCAL = ARGS.local
+
+    if LOCAL:
+        import sys
+        sys._run_from_cmdl = True  # pylint: disable=protected-access
+
+    RESULTS = main_json(CONFIG, IN_METADATA, OUT_METADATA)
+
+    print(RESULTS)
