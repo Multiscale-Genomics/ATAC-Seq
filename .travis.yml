@@ -193,7 +193,7 @@ before script:
 # command to install dependencies
 install:
     #- pip install .
-    - cd ${HOME}/build
+    - cd ${HOME}/build/Multiscale-Genomics
     - ls
     - pip install -r requirements.txt
     - pip install --upgrade setuptools pip
