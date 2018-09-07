@@ -26,6 +26,13 @@ env:
         - TESTENV=docs
         - TESTENV=code
         - TESTENV=pylint
+cache:
+    directories:
+        - $HOME/.cache/pip
+        - ${HOME}/lib
+
+before_cache:
+    - rm -f $HOME/.cache/pip/log/debug.log
 
 addons:
     apt:
@@ -63,11 +70,133 @@ addons:
             - pigz
             - tree
 
+before_install:
+    - pwd
+    - ls /usr/lib/
+    - mkdir -p ${HOME}/bin
+    - mkdir -p ${HOME}/lib
+    - mkdir -p ${HOME}/code
+    - mkdir -p ${HOME}/R
+    - lsb_release -a
+
+    # Install the latest version of R
+    - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+    - echo "deb http://cran.r-project.org/bin/linux/ubuntu trusty/" | sudo tee -a /etc/apt/sources.list
+    - sudo apt-get update -qq
+
+    #- cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
+    #- sudo chmod +x scripts/travis/includeMAC2.sh
+    #- sudo chmod +x scripts/travis/includeTADbit.sh
+    #- sudo chmod +x scripts/travis/install_wgbs_code.sh
+    
+    
+    # install bowtie2
+    - cd ${HOME}/lib
+    - wget --max-redirect 1 https://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.3.4/bowtie2-2.3.4-linux-x86_64.zip
+    - unzip bowtie2-2.3.4-linux-x86_64.zip
+
+
+    - if [[ "$TESTENV" == "code" ]]; then sudo apt-get install r-base-core; fi
+    - if [[ "$TESTENV" == "code" ]]; then sudo apt-get install python-rpy2; fi
+    - if [[ "$TESTENV" == "code" ]]; then sudo ./scripts/travis/install_code_test_dependencies.sh; fi
+    - if [[ "$TESTENV" == "code" ]]; then pip install Cython; fi
+    - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/includeMAC2.sh; fi
+    - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/includeTADbit.sh; fi
+    - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/includeMAC2.sh; fi
+    - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/includeTADbit.sh; fi
+
+services:
+    - docker
+
+before script:
+
+    - cd ${HOME}/bin
+
+    - ln -s ${HOME}/lib/FastQC/fastqc
+    - ln -s ${HOME}/lib/TrimGalore-0.5.0/trim_galore trim_galore
+
+    - ln -s ${HOME}/lib/bedtools2/bin/bedtools bedtools
+
+    - ln -s ${HOME}/lib/bwa/bwa bwa
+
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2 bowtie2
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2-align-s bowtie2-align-s
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2-align-l bowtie2-align-l
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2-build bowtie2-build
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2-build-s bowtie2-build-s
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2-build-l bowtie2-build-l
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2-inspect bowtie2-inspect
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2-inspect-s bowtie2-inspect-s
+    - ln -s ${HOME}/lib/bowtie2-2.3.4-linux-x86_64/bowtie2-inspect-l bowtie2-inspect-l
+
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-2-bed gem-2-bed
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-2-gem gem-2-gem
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-2-sam gem-2-sam
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-2-wig gem-2-wig
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-indexer gem-indexer
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-indexer_bwt-dna gem-indexer_bwt-dna
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-indexer_fasta2meta+cont gem-indexer_fasta2meta+cont
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-indexer_generate gem-indexer_generate
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-info gem-info
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gem-mapper gem-mapper
+    - ln -s ${HOME}/lib/gemtools-1.7.1-core2/bin/gemtools gemtools
+
+    - ln -s ${HOME}/lib/htslib/bin/bgzip bgzip
+    - ln -s ${HOME}/lib/htslib/bin/htsfile htsfile
+    - ln -s ${HOME}/lib/htslib/bin/tabix tabix
+
+    - ln -s ${HOME}/lib/samtools/bin/ace2sam ace2sam
+    - ln -s ${HOME}/lib/samtools/bin/blast2sam.pl blast2sam.pl
+    - ln -s ${HOME}/lib/samtools/bin/bowtie2sam.pl bowtie2sam.pl
+    - ln -s ${HOME}/lib/samtools/bin/export2sam.pl export2sam.pl
+    - ln -s ${HOME}/lib/samtools/bin/interpolate_sam.pl interpolate_sam.pl
+    - ln -s ${HOME}/lib/samtools/bin/maq2sam-long maq2sam-long
+    - ln -s ${HOME}/lib/samtools/bin/maq2sam-short maq2sam-short
+    - ln -s ${HOME}/lib/samtools/bin/md5fa md5fa
+    - ln -s ${HOME}/lib/samtools/bin/md5sum-lite md5sum-lite
+    - ln -s ${HOME}/lib/samtools/bin/novo2sam.pl novo2sam.pl
+    - ln -s ${HOME}/lib/samtools/bin/plot-bamstats plot-bamstats
+    - ln -s ${HOME}/lib/samtools/bin/psl2sam.pl psl2sam.pl
+    - ln -s ${HOME}/lib/samtools/bin/sam2vcf.pl sam2vcf.pl
+    - ln -s ${HOME}/lib/samtools/bin/samtools samtools
+    - ln -s ${HOME}/lib/samtools/bin/samtools.pl samtools.pl
+    - ln -s ${HOME}/lib/samtools/bin/seq_cache_populate.pl seq_cache_populate.pl
+    - ln -s ${HOME}/lib/samtools/bin/soap2sam.pl soap2sam.pl
+    - ln -s ${HOME}/lib/samtools/bin/varfilter.py varfilter.py
+    - ln -s ${HOME}/lib/samtools/bin/wgsim wgsim
+    - ln -s ${HOME}/lib/samtools/bin/wgsim_eval.pl wgsim_eval.pl
+    - ln -s ${HOME}/lib/samtools/bin/zoom2sam.pl zoom2sam.pl
+
+    - cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
+    - docker run -p 80:80 --name biobambamcontainer multiscalegenomics/mgprocessfastq:biobambamimage
+    - pwd
+
+    - cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
+    - chmod +x shims/*
+    - export PATH="$PWD/shims:$PATH"
+    - docker ps -a
+
+    - cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
+    - chmod +x scripts/travis/harness.sh
+    - chmod +x scripts/travis/wgbs_harness.sh
+    - chmod +x scripts/travis/docs_harness.sh
+    - chmod +x scripts/travis/pylint_harness.sh
+    - ls tests/data/
+    - git status
+
+    - export PATH="${HOME}/bin:$PATH"
+
+    - chmod +x scripts/travis/harness.sh
+    - chmod +x scripts/travis/docs_harness.sh
+    - chmod +x scripts/travis/pylint_harness.sh
 
 # command to install dependencies
 install:
-    - pip install .
+    #- pip install .
     - pip install -r requirements.txt
+    - pip install --upgrade setuptools pip
+    - pip install --upgrade -e .
+    - if [[ "$TESTENV" == "code" ]]; then pip install cutadapt; fi
     - if [[ "$TESTENV" == "docs" ]]; then pip install sphinx;fi
     - if [[ "$TESTENV" == "pylint" ]]; then pip install pylint;fi
 
