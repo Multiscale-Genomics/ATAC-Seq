@@ -19,6 +19,12 @@ Requirements and Installation
 Requirements
 ------------
 
+- cutadapt
+- Trim galore
+- Bowtie2
+- Biobambam
+- Macs2
+
 Software
 ^^^^^^^^
 
@@ -38,11 +44,11 @@ Directly from GitHub:
 .. code-block:: none
    :linenos:
 
-   git clone https://github.com/Multiscale-Genomics/mg-process-test.git
+   git clone https://github.com/Multiscale-Genomics/ATAC-Seq.git
 
 Using pip:
 
 .. code-block:: none
    :linenos:
 
-   pip install git+https://github.com/Multiscale-Genomics/mg-process-test.git
+   pip install git+https://github.com/Multiscale-Genomics/ATAC-Seq.git

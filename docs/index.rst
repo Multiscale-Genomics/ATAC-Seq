@@ -28,7 +28,6 @@ Documentation for Test Pipeline
 
    install
    pipelines
-   tool
    license
 
 

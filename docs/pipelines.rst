@@ -38,21 +38,7 @@ ATAC Seq
       Location of the output results.json file for returned files
 
    Returns
-   -------
-   peaks.xls : file
-      Tabular file which contains information about called peaks. You can open it in excel and sort/filter using excel functions.         Information include:
-      
-      .. code-block:: none
-         :linenos:
-
-         chromosome name
-         start position of peak
-         end position of peak
-         length of peak region
-         absolute peak summit position
-         pileup height at peak summit, -log10(pvalue) for the peak summit (e.g. pvalue =1e-10, then this value should be 10)
-         fold enrichment for this peak summit against random Poisson distribution with local lambda, -log10(qvalue) at peak summit
-         
+   -------         
    summits.bed : file
       Contains the peak summits locations for every peaks
       
@@ -66,6 +52,17 @@ ATAC Seq
       BED6+3 format which is similar to narrowPeak file, except for missing the 10th column for annotating 
       peak summits
 
+   peaks.xls : file
+      Tabular file which contains information about called peaks. You can open it in excel and sort/filter using excel functions.         Information include:
+
+   * chromosome name
+   * start position of peak
+   * end position of peak
+   * length of peak region
+   * absolute peak summit position
+   * pileup height at peak summit, -log10(pvalue) for the peak summit (e.g. pvalue =1e-10, then this value should be 10)
+   * fold enrichment for this peak summit against random Poisson distribution with local lambda, -log10(qvalue) at peak summit
+
 
    Example
    -------
@@ -75,11 +72,14 @@ ATAC Seq
       :linenos:
 
       cd /home/compss/code/ATAC-Seq/atac_seq
-      runcompss --lang=python process_atac_seq.py --config /home/compss/code/ATAC-Seq/tool_config/process_atac_seq.json --in_metadata /home/compss/code/ATAC-Seq/atac_seq/tests/json/input_atac_seq.json --out_metadata /home/compss/code/ATAC-Seq/atac_seq/tests/results_atac_seq.json
+      runcompss --lang=python process_atac_seq.py 
+      --config /home/compss/code/ATAC-Seq/tool_config/process_atac_seq.json 
+      --in_metadata /home/compss/code/ATAC-Seq/atac_seq/tests/json/input_atac_seq.json 
+      --out_metadata /home/compss/code/ATAC-Seq/atac_seq/tests/results_atac_seq.json
 
    Methods
    =======
-   .. autoclass:: process_atac_seq.atacSeq
+   .. autoclass:: process_atac_seq.process_atac_seq
       :members:
       
       

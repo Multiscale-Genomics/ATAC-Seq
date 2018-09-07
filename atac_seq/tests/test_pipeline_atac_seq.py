@@ -23,7 +23,7 @@ import pytest
 from basic_modules.metadata import Metadata
 from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
 from mg_process_fastq.tool.bowtie_indexer import bowtieIndexerTool
-from atac_seq.process_atac_seq import atacSeq
+from atac_seq.process_atac_seq import process_atac_seq
 
 
 @pytest.mark.atacseq
@@ -50,5 +50,5 @@ def test_atac_seq():
             "gapped_peak": resource_path + "atacseq.Human.ERR1659027_peaks.gappedPeak"
     }
 
-    atac_handle = atacSeq()
+    atac_handle = process_atac_seq()
     atac_handle.run(files, metadata, files_out)

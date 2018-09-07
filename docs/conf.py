@@ -33,7 +33,7 @@ class Mock(MagicMock):
 MOCK_MODULES = []
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
-import mg_process_test.tool
+import atac_seq.tool
 #import script
 
 
@@ -69,8 +69,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'MuG - Test Pipelines'
-copyright = '2018, Mark McDowall'
-author = 'Mark McDowall'
+copyright = '2018, Mark McDowall, Reham Fatima'
+author = 'Mark McDowall, Reham Fatima'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
