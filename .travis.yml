@@ -193,7 +193,7 @@ before script:
 # command to install dependencies
 install:
     #- pip install .
-    - cd {HOME}
+    - cd ${HOME}
     - ls
     - pip install -r requirements.txt
     - pip install --upgrade setuptools pip
