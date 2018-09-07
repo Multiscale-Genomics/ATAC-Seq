@@ -16,11 +16,14 @@
 Pipelines
 =========
 
-Test Tool
+ATAC Seq
 ---------
-.. automodule:: process_test
+.. automodule:: process_atac_seq
 
-   This is a demonstration pipeline using the testTool.
+   This pipeline takes two (or optionally one) fastq files as input along with the genome file indexed with Bowtie2 
+   The pipeline uses trimgalore to trim adapter sequences, bowtie2 to align reads and produce bam 
+   file and biobambam to filter the bam file. It uses macs2 to map, filter and produce a bed files
+   that can be used to analyze and visualize Atac Seq data sets.
 
    Running from the command line
    =============================
@@ -36,8 +39,33 @@ Test Tool
 
    Returns
    -------
-   output : file
-      Text file with a single entry
+   peaks.xls : file
+      Tabular file which contains information about called peaks. You can open it in excel and sort/filter using excel functions.         Information include:
+      
+      .. code-block:: none
+         :linenos:
+
+         chromosome name
+         start position of peak
+         end position of peak
+         length of peak region
+         absolute peak summit position
+         pileup height at peak summit, -log10(pvalue) for the peak summit (e.g. pvalue =1e-10, then this value should be 10)
+         fold enrichment for this peak summit against random Poisson distribution with local lambda, -log10(qvalue) at peak summit
+         
+   summits.bed : file
+      Contains the peak summits locations for every peaks
+      
+   narrowPeak : file
+      BED6+4 format file which contains the peak locations together with peak summit, pvalue and qvalue
+
+   gappedPeak : file
+      BED12+3 format which contains both the broad region and narrow peaks
+
+   broadPeak : file
+      BED6+3 format which is similar to narrowPeak file, except for missing the 10th column for annotating 
+      peak summits
+
 
    Example
    -------
@@ -46,10 +74,12 @@ Test Tool
    .. code-block:: none
       :linenos:
 
-      cd /home/compss/code/mg-process-test
-      runcompss --lang=python mg_process_test/process_test.py --config /home/compss/code/mg-process-test/tool_config/process_test.json --in_metadata /home/compss/code/mg-process-test/tests/json/input_test.json --out_metadata /home/compss/code/mg-process-test/tests/results.json
+      cd /home/compss/code/ATAC-Seq/atac_seq
+      runcompss --lang=python process_atac_seq.py --config /home/compss/code/ATAC-Seq/tool_config/process_atac_seq.json --in_metadata /home/compss/code/ATAC-Seq/atac_seq/tests/json/input_atac_seq.json --out_metadata /home/compss/code/ATAC-Seq/atac_seq/tests/results_atac_seq.json
 
    Methods
    =======
-   .. autoclass:: process_test.process_test
+   .. autoclass:: process_atac_seq.atacSeq
       :members:
+      
+      

@@ -89,6 +89,9 @@ class atacSeq(Tool):  # pylint: disable=invalid-name
             fastq2 : string
                 Location of the paired end FASTQ file
         input_metadata : list
+        bedpe : 
+            Users can specify this if the results need some changes. 
+            Or if the data contains singleton reads 
 
         Returns
         -------
