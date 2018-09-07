@@ -63,6 +63,10 @@ addons:
             - pigz
             - tree
 
+before script:
+    - chmod +x scripts/travis/harness.sh
+    - chmod +x scripts/travis/docs_harness.sh
+    - chmod +x scripts/travis/pylint_harness.sh
 
 # command to install dependencies
 install:
