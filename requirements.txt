@@ -1,5 +1,5 @@
 pylint
 git+https://github.com/Multiscale-Genomics/mg-tool-api.git
-git+https://github.com/Multiscale-Genomics/mg-process-fastq.git
+git+https://github.com/Multiscale-Genomics/mg-process-fastq/tree/refactor_module.git
 git+https://github.com/Multiscale-Genomics/mg-dm-api.git
 ConfigParser
