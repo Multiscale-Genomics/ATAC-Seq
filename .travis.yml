@@ -102,7 +102,6 @@ before_install:
     - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/includeMAC2.sh; fi
     #- if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/includeTADbit.sh; fi
     - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/includeMAC2.sh; fi
-    - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/includeTADbit.sh; fi
 
 services:
     - docker
