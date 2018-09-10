@@ -175,8 +175,8 @@ before script:
     - docker ps -a
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
+    - ls
     - chmod +x scripts/travis/harness.sh
-    - chmod +x scripts/travis/wgbs_harness.sh
     - chmod +x scripts/travis/docs_harness.sh
     - chmod +x scripts/travis/pylint_harness.sh
     - ls tests/data/
