@@ -106,6 +106,18 @@ before_install:
 services:
     - docker
 
+install:
+    #- pip install .
+    - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
+    - ls
+    - pip install -r requirements.txt
+    - pip install --upgrade setuptools pip
+    - pip install --upgrade -e .
+    - if [[ "$TESTENV" == "code" ]]; then pip install cutadapt; fi
+    - if [[ "$TESTENV" == "docs" ]]; then pip install sphinx;fi
+    - if [[ "$TESTENV" == "pylint" ]]; then pip install pylint;fi
+
+
 before script:
 
     - cd ${HOME}/bin
@@ -183,22 +195,6 @@ before script:
     - git status
 
     - export PATH="${HOME}/bin:$PATH"
-
-    - chmod +x scripts/travis/harness.sh
-    - chmod +x scripts/travis/docs_harness.sh
-    - chmod +x scripts/travis/pylint_harness.sh
-
-# command to install dependencies
-install:
-    #- pip install .
-    - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
-    - ls
-    - pip install -r requirements.txt
-    - pip install --upgrade setuptools pip
-    - pip install --upgrade -e .
-    - if [[ "$TESTENV" == "code" ]]; then pip install cutadapt; fi
-    - if [[ "$TESTENV" == "docs" ]]; then pip install sphinx;fi
-    - if [[ "$TESTENV" == "pylint" ]]; then pip install pylint;fi
 
 # command to run tests
 script:
