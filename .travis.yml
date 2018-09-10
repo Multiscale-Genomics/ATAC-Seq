@@ -85,9 +85,9 @@ before_install:
     - sudo apt-get update -qq
     
     # install bowtie2
-    - cd ${HOME}/lib
-    - wget --max-redirect 1 https://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.3.4/bowtie2-2.3.4-linux-x86_64.zip
-    - unzip bowtie2-2.3.4-linux-x86_64.zip
+    # - cd ${HOME}/lib
+    #- wget --max-redirect 1 https://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.3.4/bowtie2-2.3.4-linux-x86_64.zip
+    #- unzip bowtie2-2.3.4-linux-x86_64.zip
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - sudo chmod +x scripts/travis/includeMAC2.sh
