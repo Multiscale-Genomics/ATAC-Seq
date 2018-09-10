@@ -87,7 +87,7 @@ before_install:
     #- cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
     #- sudo chmod +x scripts/travis/includeMAC2.sh
     #- sudo chmod +x scripts/travis/includeTADbit.sh
-    #- sudo chmod +x scripts/travis/install_wgbs_code.sh
+    - sudo chmod +x scripts/travis/install_code_test_dependencies.sh
     
     
     # install bowtie2
