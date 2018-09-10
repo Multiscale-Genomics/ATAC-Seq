@@ -83,25 +83,22 @@ before_install:
     - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
     - echo "deb http://cran.r-project.org/bin/linux/ubuntu trusty/" | sudo tee -a /etc/apt/sources.list
     - sudo apt-get update -qq
-
-    #- cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
-    #- sudo chmod +x scripts/travis/includeMAC2.sh
-    #- sudo chmod +x scripts/travis/includeTADbit.sh
-    - sudo chmod +x scripts/travis/install_code_test_dependencies.sh
-    
     
     # install bowtie2
     - cd ${HOME}/lib
     - wget --max-redirect 1 https://downloads.sourceforge.net/project/bowtie-bio/bowtie2/2.3.4/bowtie2-2.3.4-linux-x86_64.zip
     - unzip bowtie2-2.3.4-linux-x86_64.zip
 
-
+    - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
+    - sudo chmod +x scripts/travis/includeMAC2.sh
+    #- sudo chmod +x scripts/travis/includeTADbit.sh
+    - sudo chmod +x scripts/travis/install_code_test_dependencies.sh
+    
     - if [[ "$TESTENV" == "code" ]]; then sudo apt-get install r-base-core; fi
     - if [[ "$TESTENV" == "code" ]]; then sudo apt-get install python-rpy2; fi
     - pwd
     - if [[ "$TESTENV" == "code" ]]; then sudo ./scripts/travis/install_code_test_dependencies.sh; fi
     - if [[ "$TESTENV" == "code" ]]; then pip install Cython; fi
-    - pwd
     - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/includeMAC2.sh; fi
     - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/includeTADbit.sh; fi
     - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/includeMAC2.sh; fi
@@ -169,16 +166,16 @@ before script:
     - ln -s ${HOME}/lib/samtools/bin/wgsim_eval.pl wgsim_eval.pl
     - ln -s ${HOME}/lib/samtools/bin/zoom2sam.pl zoom2sam.pl
 
-    - cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
+    - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - docker run -p 80:80 --name biobambamcontainer multiscalegenomics/mgprocessfastq:biobambamimage
     - pwd
 
-    - cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
+    - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - chmod +x shims/*
     - export PATH="$PWD/shims:$PATH"
     - docker ps -a
 
-    - cd ${HOME}/build/Multiscale-Genomics/mg-process-fastq
+    - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - chmod +x scripts/travis/harness.sh
     - chmod +x scripts/travis/wgbs_harness.sh
     - chmod +x scripts/travis/docs_harness.sh
