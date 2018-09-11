@@ -107,9 +107,10 @@ services:
     - docker
 
 install:
-    #- pip install .
+    #
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - ls
+    - pip install .
     - pip install -r requirements.txt
     - pip install --upgrade setuptools pip
     - pip install --upgrade -e .
