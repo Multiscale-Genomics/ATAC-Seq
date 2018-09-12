@@ -18,7 +18,7 @@ language: python
 os: linux
 
 python:
-    - "2.7"
+    - "2.7.12"
     #- "3.6"
 
 env:
@@ -189,6 +189,7 @@ before script:
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - ls
+    - ls scripts/travis/
     - chmod +x scripts/travis/harness.sh
     - chmod +x scripts/travis/docs_harness.sh
     - chmod +x scripts/travis/pylint_harness.sh
@@ -201,5 +202,6 @@ before script:
 script:
     - ls -l scripts/travis/harness.sh
     - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/harness.sh; fi
+    - if [[ "$TESTENV" == "docs" ]]; then pip list; fi
     - if [[ "$TESTENV" == "docs" ]]; then ./scripts/travis/docs_harness.sh; fi
     - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/pylint_harness.sh; fi
