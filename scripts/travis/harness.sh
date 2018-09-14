@@ -22,11 +22,11 @@ pv=$(python -c 'import platform; print(platform.python_version())')
 echo "File directory : "
 pwd
 pytest atac_seq/tests/test_pipeline_atac_seq.py
+ls atac_seq/tests/data/
 tc=$?
 rc=$(($rc + $tc))
 bash tidy_data.sh
 echo "Test running"
-ls atac_seq/tests/data/
 #$fi
 
 
