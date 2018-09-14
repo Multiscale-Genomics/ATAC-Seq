@@ -203,6 +203,5 @@ script:
     - chmod +x scripts/travis/harness.sh
     - ls -l scripts/travis/harness.sh
     - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/harness.sh; fi
-    - if [[ "$TESTENV" == "docs" ]]; then pip list; fi
     - if [[ "$TESTENV" == "docs" ]]; then ./scripts/travis/docs_harness.sh; fi
     - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/pylint_harness.sh; fi
