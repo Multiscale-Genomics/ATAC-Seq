@@ -123,6 +123,8 @@ install:
 
 before script:
 
+    - echo "In before script"
+    - pwd
     - cd ${HOME}/bin
 
     - ln -s ${HOME}/lib/FastQC/fastqc
