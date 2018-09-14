@@ -23,6 +23,7 @@ if [[ $pv == "2.7.12" ]]; then
     tc=$?
     rc=$(($rc + $tc))
     bash tidy_data.sh
+    echo "Test running"
 fi
 
 
