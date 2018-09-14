@@ -18,7 +18,7 @@
 disabled="--disable=similarities,invalid-name,too-many-statements,too-many-arguments,too-many-locals,too-few-public-methods,relative-import,no-self-use"
 
 pwd
-
+ls
 pylint ${disabled} --rcfile pylintrc atac_seq/process_atac_seq/ > output.err
 
 grep -v "\-\-\-\-\-\-\-\-\-" output.err | grep -v "Your code has been rated" | grep -v "\n\n" | sed '/^$/d' > pylint.err
