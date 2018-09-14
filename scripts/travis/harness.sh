@@ -18,13 +18,13 @@
 rc=0
 pv=$(python -c 'import platform; print(platform.python_version())')
 
-if [[ $pv == "2.7.12" ]]; then
+#if [[ $pv == "2.7.12" ]]; then
     pytest tests/test_pipeline_atac_seq.py
     tc=$?
     rc=$(($rc + $tc))
     bash tidy_data.sh
     echo "Test running"
-fi
+$fi
 
 
 if [[ $rc != 0 ]]; then exit $rc; fi
