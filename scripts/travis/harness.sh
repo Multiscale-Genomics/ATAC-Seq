@@ -19,6 +19,7 @@ rc=0
 pv=$(python -c 'import platform; print(platform.python_version())')
 
 #if [[ $pv == "2.7.12" ]]; then
+echo "File directory : "
 pwd
 pytest tests/test_pipeline_atac_seq.py
 tc=$?
