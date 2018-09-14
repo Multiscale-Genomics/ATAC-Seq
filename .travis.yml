@@ -175,13 +175,9 @@ before_script:
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - ls scripts/travis/
-    - ls
-    - echo "Before ls 2"
-    - echo "After ls 2"
     - chmod +x scripts/travis/harness.sh
     - chmod +x scripts/travis/docs_harness.sh
     - chmod +x scripts/travis/pylint_harness.sh
-    - ls tests/data/
     - git status
 
     - export PATH="${HOME}/bin:$PATH"
