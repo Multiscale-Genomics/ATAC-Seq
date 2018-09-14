@@ -190,9 +190,9 @@ before script:
     - docker ps -a
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
+    - ls scripts/travis/
     - ls
     - echo "Before ls 2"
-    - ls scripts/travis/
     - echo "After ls 2"
     - chmod +x scripts/travis/harness.sh
     - chmod +x scripts/travis/docs_harness.sh
