@@ -26,6 +26,7 @@ tc=$?
 rc=$(($rc + $tc))
 bash tidy_data.sh
 echo "Test running"
+ls atac_seq/tests/data/
 #$fi
 
 
