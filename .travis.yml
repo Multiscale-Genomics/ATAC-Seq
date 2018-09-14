@@ -18,7 +18,7 @@ language: python
 os: linux
 
 python:
-    - "2.7.12"
+    - "2.7"
     #- "3.6"
 
 env:
@@ -112,7 +112,9 @@ install:
     - ls
     - pip install .
     - pip install -r requirements.txt
+    - echo "before upgrade setup"
     - pip install --upgrade setuptools pip
+    - echo "after upgrade setup"
     - pip install --upgrade -e .
     - if [[ "$TESTENV" == "code" ]]; then pip install cutadapt; fi
     - if [[ "$TESTENV" == "docs" ]]; then pip install sphinx;fi
@@ -189,7 +191,9 @@ before script:
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - ls
+    - echo "Before ls 2"
     - ls scripts/travis/
+    - echo "After ls 2"
     - chmod +x scripts/travis/harness.sh
     - chmod +x scripts/travis/docs_harness.sh
     - chmod +x scripts/travis/pylint_harness.sh
@@ -200,8 +204,8 @@ before script:
 
 # command to run tests
 script:
+    - chmod +x scripts/travis/harness.sh
     - ls -l scripts/travis/harness.sh
     - if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/harness.sh; fi
-    - if [[ "$TESTENV" == "docs" ]]; then pip list; fi
     - if [[ "$TESTENV" == "docs" ]]; then ./scripts/travis/docs_harness.sh; fi
     - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/pylint_harness.sh; fi

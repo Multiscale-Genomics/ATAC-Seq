@@ -41,7 +41,7 @@ except ImportError:
 from basic_modules.metadata import Metadata
 from basic_modules.workflow import Workflow
 
-from mg_process_fastq.tool.aligner_utils import alignerUtils
+#from mg_process_fastq.tool.aligner_utils import alignerUtils
 from mg_process_fastq.tool.bowtie_indexer import bowtieIndexerTool
 from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
 from mg_process_fastq.tool.biobambam_filter import biobambam
