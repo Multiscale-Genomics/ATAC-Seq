@@ -67,7 +67,6 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             should be carried out, which are specific to each Tool.
         """
         logger.info("ATAC Seq")
-        Tool.__init__(self)
 
         if configuration is None:
             configuration = {}
