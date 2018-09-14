@@ -112,7 +112,9 @@ install:
     - ls
     - pip install .
     - pip install -r requirements.txt
+    - echo "before upgrade setup"
     - pip install --upgrade setuptools pip
+    - echo "after upgrade setup"
     - pip install --upgrade -e .
     - if [[ "$TESTENV" == "code" ]]; then pip install cutadapt; fi
     - if [[ "$TESTENV" == "docs" ]]; then pip install sphinx;fi
