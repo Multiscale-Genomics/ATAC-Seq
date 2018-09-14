@@ -19,7 +19,7 @@ disabled="--disable=similarities,invalid-name,too-many-statements,too-many-argum
 
 pwd
 
-pylint ${disabled} --rcfile pylintrc process_atac_seq.py/ > output.err
+pylint ${disabled} --rcfile pylintrc atac_seq/process_atac_seq/ > output.err
 
 grep -v "\-\-\-\-\-\-\-\-\-" output.err | grep -v "Your code has been rated" | grep -v "\n\n" | sed '/^$/d' > pylint.err
 
