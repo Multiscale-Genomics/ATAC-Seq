@@ -103,7 +103,7 @@ before_install:
     #- if [[ "$TESTENV" == "code" ]]; then ./scripts/travis/includeTADbit.sh; fi
     - if [[ "$TESTENV" == "pylint" ]]; then ./scripts/travis/includeMAC2.sh; fi
     
-before script:
+before_script:
 
     - echo "In before script"
     - pwd
