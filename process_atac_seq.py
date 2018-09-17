@@ -20,7 +20,6 @@ from __future__ import print_function
 import os
 import shlex
 import subprocess
-import sys
 import argparse
 
 from utils import logger
