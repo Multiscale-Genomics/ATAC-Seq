@@ -185,12 +185,12 @@ before_script:
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - docker run -p 80:80 --name biobambamcontainer multiscalegenomics/mgprocessfastq:biobambamimage
     - pwd
-    - bamsormadup --help
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - chmod +x shims/*
     - export PATH="$PWD/shims:$PATH"
     - docker ps -a
+    - if [[ "$TESTENV" == "code" ]]; then bamsormadup --help; fi
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - ls scripts/travis/
