@@ -18,31 +18,14 @@
 from __future__ import print_function
 
 import os
-import shlex
-import subprocess
 import argparse
 
 from utils import logger
 
-try:
-    if hasattr(sys, '_run_from_cmdl') is True:
-        raise ImportError
-    from pycompss.api.parameter import FILE_IN, FILE_OUT
-    from pycompss.api.task import task
-    from pycompss.api.api import compss_wait_on
-except ImportError:
-    logger.warn("[Warning] Cannot import \"pycompss\" API packages.")
-    logger.warn("          Using mock decorators.")
-
-    from utils.dummy_pycompss import FILE_IN, FILE_OUT  # pylint: disable=ungrouped-imports
-    from utils.dummy_pycompss import task  # pylint: disable=ungrouped-imports
-    from utils.dummy_pycompss import compss_wait_on  # pylint: disable=ungrouped-imports
-
 from basic_modules.metadata import Metadata
 from basic_modules.workflow import Workflow
 
-#from mg_process_fastq.tool.aligner_utils import alignerUtils
-from mg_process_fastq.tool.bowtie_indexer import bowtieIndexerTool
+from mg_process_fastq.tool.aligner_utils import alignerUtils
 from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
 from mg_process_fastq.tool.biobambam_filter import biobambam
 from mg_process_fastq.tool.trimgalore import trimgalore
