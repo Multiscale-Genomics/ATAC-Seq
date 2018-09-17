@@ -21,18 +21,6 @@
         {
             "name": "project",
             "value": "run001"
-        },
-        {
-            "name": "description",
-            "value": null
-        },
-        {
-            "name": "macs_nomodel_param",
-            "value": true
-        },
-        {
-            "name": "macs_qvalue_param",
-            "value": "0.05"
         }
     ],
     "output_files": [
