@@ -21,6 +21,7 @@ import os
 import shlex
 import subprocess
 import sys
+import argparse
 
 from utils import logger
 
@@ -73,7 +74,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
 
         self.configuration.update(configuration)
 
-    def run(self, input_files, input_metadata, output_files, bedpe = False):
+    def run(self, input_files, input_metadata, output_files, bedpe=False):
         """
         Tool for generating bed and peak files for use with the ATAC-Seq
         data
@@ -88,9 +89,9 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             fastq2 : string
                 Location of the paired end FASTQ file
         input_metadata : list
-        bedpe : 
-            Users can specify this if the results need some changes. 
-            Or if the data contains singleton reads 
+        bedpe :
+            Users can specify this if the results need some changes.
+            Or if the data contains singleton reads
 
         Returns
         -------
@@ -128,6 +129,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             output_gappedpeak : str
                 Location of the gappedpeak output file
         """
+
         results = {}
         resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
@@ -299,7 +301,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
 
         self.configuration["macs_nomodel_param"] = True
         self.configuration["macs_keep-dup_param"] = "all"
-        
+
         if bedpe:
             self.configuration["macs_format_param"] = "BEDPE"
 
