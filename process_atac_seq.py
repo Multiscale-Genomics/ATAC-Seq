@@ -56,7 +56,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
 
         self.configuration.update(configuration)
 
-    def run(self, input_files, input_metadata, output_files, bedpe=False):
+    def run(self, input_files, metadata, output_files, bedpe=False):
         """
         Tool for generating bed and peak files for use with the ATAC-Seq
         data
