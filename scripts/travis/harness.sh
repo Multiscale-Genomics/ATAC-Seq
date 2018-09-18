@@ -21,13 +21,15 @@ pv=$(python -c 'import platform; print(platform.python_version())')
 #if [[ $pv == "2.7.12" ]]; then
 echo "File directory : "
 pwd
-echo "before tests bam: "
-bamsormadup --help
+echo "before tests TG: "
+trim_galore
+#bamsormadup --help
 pytest atac_seq/tests/test_pipeline_atac_seq.py
 tc=$?
 rc=$(($rc + $tc))
-echo "after tests bam: "
-bamsormadup --help
+echo "after tests TG: "
+trim_galore
+#bamsormadup --help
 ls atac_seq/tests/data/
 bash tidy_data.sh
 echo "Test running"
