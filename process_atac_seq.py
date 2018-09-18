@@ -161,7 +161,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         self.configuration["tg_length"] = "0"
 
         tg_handle = trimgalore(self.configuration)
-        tg_files, tg_meta = tg_handle.run(files, metadata, files_out)
+        tg_meta = tg_handle.run(files, metadata, files_out)
 
         """
         Align the genome file
@@ -292,7 +292,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
 
         print("Summits file: ", output_files["summits"])
 
-        results = compss_wait_on(results)
+        #results = compss_wait_on(results)
 
         if results is False:
             logger.fatal("ATAC Seq: run failed")
