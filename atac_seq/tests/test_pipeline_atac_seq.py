@@ -48,7 +48,8 @@ def test_atac_seq():
 
         "fastq2": Metadata(
             "data_atac", "fastq", files['fastq2'], None,
-        )
+        ),
+        "bedpe": False
     }
 
     files_out = {

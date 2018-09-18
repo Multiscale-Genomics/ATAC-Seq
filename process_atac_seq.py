@@ -25,7 +25,6 @@ from utils import logger
 from basic_modules.metadata import Metadata
 from basic_modules.workflow import Workflow
 
-from mg_process_fastq.tool.aligner_utils import alignerUtils
 from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
 from mg_process_fastq.tool.biobambam_filter import biobambam
 from mg_process_fastq.tool.trimgalore import trimgalore
@@ -56,7 +55,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
 
         self.configuration.update(configuration)
 
-    def run(self, input_files, metadata, output_files, bedpe=False):
+    def run(self, input_files, metadata, output_files):
         """
         Tool for generating bed and peak files for use with the ATAC-Seq
         data
@@ -85,6 +84,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         }
         """
 
+        bedpe = metadata['bedpe']
         genome_file = input_files['genome']
         input_fastq1 = input_files['fastq1']
 
@@ -110,7 +110,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
                 Location of the broadpeak output file
             output_gappedpeak : str
                 Location of the gappedpeak output file
-        """
+    """
 
         results = {}
         resource_path = os.path.join(os.path.dirname(__file__), "data/")
@@ -161,16 +161,11 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         self.configuration["tg_length"] = "0"
 
         tg_handle = trimgalore(self.configuration)
-        tg_meta = tg_handle.run(files, metadata, files_out)
+        tg_handle.run(files, metadata, files_out)
 
         """
         Align the genome file
         """
-        if ".fa" in genome_file:
-            index_file = genome_file.replace("fa", "idx")
-
-        elif ".fasta" in genome_file:
-            index_file = genome_file.replace("fasta", "idx")
 
         fastq_file_1 = input_fastq1
 
