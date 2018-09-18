@@ -41,7 +41,15 @@ def test_atac_seq():
         'fastq2': resource_path + 'ERR1659027_2.fastq'
     }
 
-    metadata = {}
+    metadata = {
+        "fastq1": Metadata(
+            "data_atac", "fastq", files['fastq1'], None,
+        ),
+
+        "fastq2": Metadata(
+            "data_atac", "fastq", files['fastq2'], None,
+        )
+    }
 
     files_out = {
             "narrow_peak": resource_path + "atacseq.Human.ERR1659027_peaks.narrowPeak",
