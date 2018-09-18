@@ -119,7 +119,7 @@ install:
     - pip install --upgrade -e .
     - if [[ "$TESTENV" == "code" ]]; then pip install cutadapt; fi
     - if [[ "$TESTENV" == "docs" ]]; then pip install sphinx;fi
-    - if [[ "$TESTENV" == "pylint" ]]; then pip install pylint;fi
+    - if [[ "$TESTENV" == "pylint" ]]; then pip install pylint; python -m pip install astroid; fi
     
 before_script:
 
