@@ -19,6 +19,7 @@ from __future__ import print_function
 
 import os
 import argparse
+import subprocess
 
 from utils import logger
 
@@ -118,6 +119,8 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         """
         Trim Adapters from fastq files.
         """
+        fastq1_trimmed = input_fastq1 + '.trimmed'
+        fastq2_trimmed = input_fastq2 + '.trimmed'
 
         if "fastq2" in input_files:
             files = {
@@ -125,19 +128,9 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
                 'fastq2': input_fastq2
             }
 
-            metadata = {
-                "fastq1": Metadata(
-                    "data_wgbs", "fastq", files['fastq1'], None,
-                ),
-
-                "fastq2": Metadata(
-                    "data_wgbs", "fastq", files['fastq2'], None,
-                )
-            }
-
             files_out = {
-                "fastq1_trimmed": input_fastq1 + '.trimmed',
-                "fastq2_trimmed": input_fastq2 + '.trimmed',
+                "fastq1_trimmed": fastq1_trimmed,
+                "fastq2_trimmed": fastq2_trimmed,
                 "fastq1_report": input_fastq1 + '.trimmed.report.txt',
                 "fastq2_report": input_fastq2 + '.trimmed.report.txt'
             }
@@ -147,14 +140,8 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
                 'fastq1': input_fastq1
             }
 
-            metadata = {
-                "fastq1": Metadata(
-                    "data_wgbs", "fastq", files['fastq1'], None,
-                )
-            }
-
             files_out = {
-                "fastq1_trimmed": input_fastq1 + '.trimmed',
+                "fastq1_trimmed": fastq1_trimmed,
                 "fastq1_report": input_fastq1 + '.trimmed.report.txt',
             }
 
@@ -179,23 +166,12 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
                 "fastq2": fastq_file_2
             }
 
-            metadata = {
+            metadata_bowtie = {
                 "genome": Metadata(
                     "Assembly", "fasta", genome_file, None,
                     {"assembly": "test"}),
-                "index": Metadata(
-                    "index_bwa", "", [genome_file],
-                    {
-                        "assembly": "test",
-                        "tool": "bowtie_aligner"
-                    }
-                ),
                 "loc": Metadata(
-                    "data_wgbs", "fastq", fastq_file_1, None,
-                    {"assembly": "test"}
-                ),
-                "fastq2": Metadata(
-                    "data_wgbs", "fastq", fastq_file_2, None,
+                    "data_atac", "fastq", fastq_file_1, None,
                     {"assembly": "test"}
                 )
             }
@@ -207,19 +183,12 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
                 "loc": fastq_file_1
             }
 
-            metadata = {
+            metadata_bowtie = {
                 "genome": Metadata(
                     "Assembly", "fasta", genome_file, None,
                     {"assembly": "test"}),
-                "index": Metadata(
-                    "index_bwa", "", [genome_file],
-                    {
-                        "assembly": "test",
-                        "tool": "bowtie_aligner"
-                    }
-                ),
                 "loc": Metadata(
-                    "data_wgbs", "fastq", fastq_file_1, None,
+                    "data_atac", "fastq", fastq_file_1, None,
                     {"assembly": "test"}
                 )
             }
@@ -229,14 +198,16 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         }
 
         bowtie2_handle = bowtie2AlignerTool()
-        bowtie2_handle.run(input_files, metadata, output_files)
+        bowtie2_handle.run(input_files, metadata_bowtie, output_files)
 
-        bam_file = input_fastq1.replace("_1.fastq", ".bam")
+        bam_file = fastq_file_1.replace(".fastq", "_bt2.bam")#input_fastq1.replace("_1.fastq", ".bam")
 
         bam_filtered = bam_file + "filtered"
         input_files = {
             "input": bam_file
         }
+        
+        print ("******** Input file for BAM *******", bam_file)
 
         output_files = {
             "output": bam_filtered
