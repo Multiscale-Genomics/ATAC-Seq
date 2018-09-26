@@ -19,7 +19,6 @@ from __future__ import print_function
 
 import os
 import argparse
-import subprocess
 
 from utils import logger
 
@@ -115,7 +114,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
         # Trim Adapters from fastq files.
-        
+
         fastq1_trimmed = input_fastq1 + '.trimmed'
         fastq2_trimmed = input_fastq2 + '.trimmed'
 
@@ -195,13 +194,13 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         bowtie2_handle = bowtie2AlignerTool()
         bowtie2_handle.run(input_files, metadata_bowtie, output_files)
 
-        bam_file = fastq_file_1.replace(".fastq", "_bt2.bam")#input_fastq1.replace("_1.fastq", ".bam")
+        bam_file = fastq_file_1.replace(".fastq", "_bt2.bam")
 
         bam_filtered = bam_file + "filtered"
         input_files = {
             "input": bam_file
         }
-        
+
         print ("******** Input file for BAM *******", bam_file)
 
         output_files = {
