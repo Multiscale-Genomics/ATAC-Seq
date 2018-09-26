@@ -83,6 +83,21 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             "broad_peak": resource_path + "atacseq.Human.ERR1659027_peaks.broadPeak",
             "gapped_peak": resource_path + "atacseq.Human.ERR1659027_peaks.gappedPeak"
         }
+
+        genome_file : str
+            Location of the genome assembly FASTA file
+        input_fastq1 : str
+            Location of the fastq file 1
+        input_fastq2 : str
+            Location of the fastq file 2
+        output_narrowpeak : str
+            Location of the narrow peak output file
+        output_summits : str
+            Location of the summits.bed output file
+        output_broadpeak : str
+            Location of the broadpeak output file
+        output_gappedpeak : str
+            Location of the gappedpeak output file
         """
 
         bedpe = metadata['bedpe']
@@ -96,29 +111,11 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         output_broadpeak = output_files['broad_peak']
         output_gappedpeak = output_files['gapped_peak']
 
-        """
-            genome_file : str
-                Location of the genome assembly FASTA file
-            input_fastq1 : str
-                Location of the fastq file 1
-            input_fastq2 : str
-                Location of the fastq file 2
-            output_narrowpeak : str
-                Location of the narrow peak output file
-            output_summits : str
-                Location of the summits.bed output file
-            output_broadpeak : str
-                Location of the broadpeak output file
-            output_gappedpeak : str
-                Location of the gappedpeak output file
-    """
-
         results = {}
         resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
-        """
-        Trim Adapters from fastq files.
-        """
+        # Trim Adapters from fastq files.
+        
         fastq1_trimmed = input_fastq1 + '.trimmed'
         fastq2_trimmed = input_fastq2 + '.trimmed'
 
@@ -150,9 +147,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         tg_handle = trimgalore(self.configuration)
         tg_handle.run(files, metadata, files_out)
 
-        """
-        Align the genome file
-        """
+        #Align the genome file
 
         fastq_file_1 = input_fastq1
 
@@ -222,9 +217,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         bbb = biobambam()
         bbb.run(input_files, metadata, output_files)
 
-        """
-        Call peaks with macs2
-        """
+        # Call peaks with macs2
 
         input_files = {
             "bam": bam_filtered
