@@ -99,100 +99,65 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             Location of the gappedpeak output file
         """
 
-        bedpe = metadata['bedpe']
+        bedpe = self.configuration['macs2_bedpe']
         genome_file = input_files['genome']
-        input_fastq1 = input_files['fastq1']
 
-        if "fastq2" in input_files:
-            input_fastq2 = input_files['fastq2']
+        input_fastq1 = input_files['fastq1']
+        fastq1_trimmed = input_fastq1 + '.trimmed'
+
         output_narrowpeak = output_files['narrow_peak']
         output_summits = output_files['summits']
         output_broadpeak = output_files['broad_peak']
         output_gappedpeak = output_files['gapped_peak']
 
         results = {}
-        resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
         # Trim Adapters from fastq files.
+        input_files_trim = {
+            'fastq1': input_fastq1
+        }
 
-        fastq1_trimmed = input_fastq1 + '.trimmed'
-        fastq2_trimmed = input_fastq2 + '.trimmed'
+        files_out = {
+            "fastq1_trimmed": fastq1_trimmed,
+            "fastq1_report": input_fastq1 + '.trimmed.report.txt'
+        }
 
         if "fastq2" in input_files:
-            files = {
-                'fastq1': input_fastq1,
-                'fastq2': input_fastq2
-            }
+            input_files_trim['fastq2'] = input_files['fastq2']
 
-            files_out = {
-                "fastq1_trimmed": fastq1_trimmed,
-                "fastq2_trimmed": fastq2_trimmed,
-                "fastq1_report": input_fastq1 + '.trimmed.report.txt',
-                "fastq2_report": input_fastq2 + '.trimmed.report.txt'
-            }
-
-        else:
-            files = {
-                'fastq1': input_fastq1
-            }
-
-            files_out = {
-                "fastq1_trimmed": fastq1_trimmed,
-                "fastq1_report": input_fastq1 + '.trimmed.report.txt',
-            }
+            files_out["fastq2_trimmed"] = input_files['fastq2'] + '.trimmed'
+            files_out["fastq2_report"] = input_files['fastq2'] + '.trimmed.report.txt'
 
         self.configuration["tg_length"] = "0"
 
         tg_handle = trimgalore(self.configuration)
-        tg_handle.run(files, metadata, files_out)
+        tg_files, tg_meta = tg_handle.run(input_files_trim, metadata, files_out)
 
-        #Align the genome file
+        # Align the genome file
 
         fastq_file_1 = input_fastq1
 
+        input_files_bowtie = {
+            "genome": genome_file,
+            "index": input_files["index"],
+            "loc": tg_files["fastq1_trimmed"]
+        }
+        metadata_bowtie = {
+            "genome": metadata["genome"],
+            "index": metadata["index"],
+            "loc": tg_files["fastq1_trimmed"]
+        }
+
         if "fastq2" in input_files:
-            fastq_file_2 = input_fastq2
-
-            input_files = {
-                "genome": genome_file,
-                "index": genome_file + ".bt2.tar.gz",
-                "loc": fastq_file_1,
-                "fastq2": fastq_file_2
-            }
-
-            metadata_bowtie = {
-                "genome": Metadata(
-                    "Assembly", "fasta", genome_file, None,
-                    {"assembly": "test"}),
-                "loc": Metadata(
-                    "data_atac", "fastq", fastq_file_1, None,
-                    {"assembly": "test"}
-                )
-            }
-
-        else:
-            input_files = {
-                "genome": genome_file,
-                "index": genome_file + ".bt2.tar.gz",
-                "loc": fastq_file_1
-            }
-
-            metadata_bowtie = {
-                "genome": Metadata(
-                    "Assembly", "fasta", genome_file, None,
-                    {"assembly": "test"}),
-                "loc": Metadata(
-                    "data_atac", "fastq", fastq_file_1, None,
-                    {"assembly": "test"}
-                )
-            }
+            input_files_bowtie["fastq2"] = tg_files["fastq2_trimmed"]
+            metadata_bowtie["fastq2"] = tg_meta["fastq2_trimmed"]
 
         output_files = {
             "output": fastq_file_1.replace(".fastq", "_bt2.bam")
         }
 
         bowtie2_handle = bowtie2AlignerTool()
-        bowtie2_handle.run(input_files, metadata_bowtie, output_files)
+        bowtie2_handle.run(input_files_bowtie, metadata_bowtie, output_files)
 
         bam_file = fastq_file_1.replace(".fastq", "_bt2.bam")
 
@@ -210,7 +175,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         metadata = {
             "input": Metadata(
                 "data_chipseq", "fastq", [], None,
-                {'assembly' : 'test'}),
+                {'assembly': 'test'}),
         }
 
         bbb = biobambam()
@@ -232,10 +197,10 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         metadata = {
             "bam": Metadata(
                 "data_atacseq", "fastq", [], None,
-                {'assembly' : 'test'}),
+                {'assembly': 'test'}),
         }
 
-        print("BAM FILE :", resource_path + bam_file)
+        print("BAM FILE :", bam_file)
         print("Output_files :", output_files["narrow_peak"])
         print("output_narrowPeak :", output_narrowpeak)
 

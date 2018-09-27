@@ -21,8 +21,6 @@ import os.path
 import pytest
 
 from basic_modules.metadata import Metadata
-from mg_process_fastq.tool.bowtie_aligner import bowtie2AlignerTool
-from mg_process_fastq.tool.bowtie_indexer import bowtieIndexerTool
 from process_atac_seq import process_atac_seq
 
 
@@ -35,10 +33,13 @@ def test_atac_seq():
 
     resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
+    genome_fa = resource_path + 'atac.Human.hg19.fasta'
+
     files = {
-        'genome': resource_path + 'atac.Human.hg19.fasta',
+        'genome': genome_fa,
         'fastq1': resource_path + 'ERR1659027_1.fastq',
-        'fastq2': resource_path + 'ERR1659027_2.fastq'
+        'fastq2': resource_path + 'ERR1659027_2.fastq',
+        'index': resource_path + "atac.Human.hg19.fasta.bt2.tar.gz"
     }
 
     metadata = {
@@ -49,15 +50,24 @@ def test_atac_seq():
         "fastq2": Metadata(
             "data_atac", "fastq", files['fastq2'], None,
         ),
-        "bedpe": False
+        "genome": Metadata(
+            "Assembly", "fasta", genome_fa, None,
+            {"assembly": "test"}),
+        "index": Metadata(
+            "index_bwa", "", [genome_fa],
+            {
+                "assembly": "test",
+                "tool": "bowtie_indexer"
+            }
+        ),
     }
 
     files_out = {
-            "narrow_peak": resource_path + "atacseq.Human.ERR1659027_peaks.narrowPeak",
-            "summits": resource_path + "atacseq.Human.ERR1659027_peaks.summits.bed",
-            "broad_peak": resource_path + "atacseq.Human.ERR1659027_peaks.broadPeak",
-            "gapped_peak": resource_path + "atacseq.Human.ERR1659027_peaks.gappedPeak"
+        "narrow_peak": resource_path + "atacseq.Human.ERR1659027_peaks.narrowPeak",
+        "summits": resource_path + "atacseq.Human.ERR1659027_peaks.summits.bed",
+        "broad_peak": resource_path + "atacseq.Human.ERR1659027_peaks.broadPeak",
+        "gapped_peak": resource_path + "atacseq.Human.ERR1659027_peaks.gappedPeak"
     }
 
-    atac_handle = process_atac_seq({"execution": resource_path})
+    atac_handle = process_atac_seq({"execution": resource_path, "tg_paired": True, "macs2_bedpe": False})
     atac_handle.run(files, metadata, files_out)
