@@ -19,6 +19,7 @@ from __future__ import print_function
 
 import os
 import argparse
+import pdb
 
 from utils import logger
 
@@ -135,17 +136,18 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
 
         # Align the genome file
 
-        fastq_file_1 = input_fastq1
-
         input_files_bowtie = {
-            "genome": genome_file,
+            "genome": input_files["genome"],
             "index": input_files["index"],
             "loc": tg_files["fastq1_trimmed"]
         }
         metadata_bowtie = {
             "genome": metadata["genome"],
             "index": metadata["index"],
-            "loc": tg_files["fastq1_trimmed"]
+            "loc":  Metadata(
+                    "data_atac", "fastq", tg_files["fastq1_trimmed"], None,
+                    {"assembly": "test"}
+                )
         }
 
         if "fastq2" in input_files:
@@ -153,16 +155,16 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             metadata_bowtie["fastq2"] = tg_meta["fastq2_trimmed"]
 
         output_files = {
-            "output": fastq_file_1.replace(".fastq", "_bt2.bam")
+            "output": input_fastq1.replace(".fastq", "_bt2.bam")
         }
 
         bowtie2_handle = bowtie2AlignerTool()
         bowtie2_handle.run(input_files_bowtie, metadata_bowtie, output_files)
 
-        bam_file = fastq_file_1.replace(".fastq", "_bt2.bam")
+        bam_file = input_fastq1.replace(".fastq", "_bt2.bam")
 
         bam_filtered = bam_file + "filtered"
-        input_files = {
+        input_files_bbb = {
             "input": bam_file
         }
 
@@ -172,20 +174,18 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             "output": bam_filtered
         }
 
-        metadata = {
+        metadata_bbb = {
             "input": Metadata(
                 "data_chipseq", "fastq", [], None,
                 {'assembly': 'test'}),
         }
 
         bbb = biobambam()
-        bbb.run(input_files, metadata, output_files)
+        bbb.run(input_files_bbb, metadata_bbb, output_files)
 
         # Call peaks with macs2
 
-        input_files = {
-            "bam": bam_filtered
-        }
+        input_files["bam"] = bam_filtered
 
         output_files = {
             "narrow_peak": output_narrowpeak,
