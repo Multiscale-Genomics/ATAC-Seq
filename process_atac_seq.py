@@ -19,7 +19,6 @@ from __future__ import print_function
 
 import os
 import argparse
-import pdb
 
 from utils import logger
 
@@ -137,7 +136,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         # Align the genome file
 
         input_files_bowtie = {
-            "genome": input_files["genome"],
+            "genome": genome_file,
             "index": input_files["index"],
             "loc": tg_files["fastq1_trimmed"]
         }
@@ -145,8 +144,8 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             "genome": metadata["genome"],
             "index": metadata["index"],
             "loc":  Metadata(
-                    "data_atac", "fastq", tg_files["fastq1_trimmed"], None,
-                    {"assembly": "test"}
+                "data_atac", "fastq", tg_files["fastq1_trimmed"], None,
+                {"assembly": "test"}
                 )
         }
 
