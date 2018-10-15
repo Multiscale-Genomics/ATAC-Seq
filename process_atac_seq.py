@@ -54,7 +54,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
 
         self.configuration.update(configuration)
 
-    def run(self, input_files, metadata, output_files):
+    def run(self, input_files, metadata, output_files): # pylint: disable=too-many-locals
         """
         Tool for generating bed and peak files for use with the ATAC-Seq
         data
@@ -105,9 +105,6 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         fastq1_trimmed = input_fastq1 + '.trimmed'
 
         output_narrowpeak = output_files['narrow_peak']
-        output_summits = output_files['summits']
-        output_broadpeak = output_files['broad_peak']
-        output_gappedpeak = output_files['gapped_peak']
 
         results = {}
 
@@ -157,7 +154,11 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         }
 
         bowtie2_handle = bowtie2AlignerTool()
-        bt_out, bt_meta = bowtie2_handle.run(input_files_bowtie, metadata_bowtie, output_files_bowtie)
+        bt_out, bt_meta = bowtie2_handle.run(
+            input_files_bowtie,
+            metadata_bowtie,
+            output_files_bowtie
+            )
 
         bam_file = output_files_bowtie["output"]
         bam_filtered = bam_file + "filtered"
@@ -182,13 +183,6 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         # Call peaks with macs2
 
         input_files["bam"] = output_files_bbb["output"]
-
-        """output_files = {
-            "narrow_peak": output_narrowpeak,
-            "summits": output_summits,
-            "broad_peak": output_broadpeak,
-            "gapped_peak": output_gappedpeak
-        }"""
 
         metadata_macs = {
             "bam": Metadata(
