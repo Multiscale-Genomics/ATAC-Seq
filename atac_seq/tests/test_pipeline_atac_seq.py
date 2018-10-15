@@ -33,7 +33,7 @@ def test_atac_seq():
 
     resource_path = os.path.join(os.path.dirname(__file__), "data/")
 
-    genome_fa = resource_path + 'atac.Human.hg19.bt2/atac.Human.hg19'
+    genome_fa = resource_path + 'atac.Human.hg19.fa.bt2/atac.Human.hg19'
 
     files = {
         'genome': genome_fa,

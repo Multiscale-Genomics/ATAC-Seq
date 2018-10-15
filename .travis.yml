@@ -123,8 +123,6 @@ install:
     
 before_script:
 
-    - echo "In before script"
-    - pwd
     - cd ${HOME}/bin
 
     - ln -s ${HOME}/lib/FastQC/fastqc
@@ -190,7 +188,7 @@ before_script:
     - chmod +x shims/*
     - export PATH="$PWD/shims:$PATH"
     - docker ps -a
-    - if [[ "$TESTENV" == "code" ]]; then bamsormadup --help; fi
+    #- if [[ "$TESTENV" == "code" ]]; then bamsormadup --help; fi
 
     - cd ${HOME}/build/Multiscale-Genomics/ATAC-Seq
     - ls scripts/travis/
