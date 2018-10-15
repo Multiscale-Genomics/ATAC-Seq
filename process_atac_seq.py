@@ -152,49 +152,47 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             input_files_bowtie["fastq2"] = tg_files["fastq2_trimmed"]
             metadata_bowtie["fastq2"] = tg_meta["fastq2_trimmed"]
 
-        output_files = {
+        output_files_bowtie = {
             "output": input_fastq1.replace(".fastq", "_bt2.bam")
         }
 
         bowtie2_handle = bowtie2AlignerTool()
-        bowtie2_handle.run(input_files_bowtie, metadata_bowtie, output_files)
+        bt_out, bt_meta = bowtie2_handle.run(input_files_bowtie, metadata_bowtie, output_files_bowtie)
 
-        bam_file = input_fastq1.replace(".fastq", "_bt2.bam")
-
+        bam_file = output_files_bowtie["output"]
         bam_filtered = bam_file + "filtered"
+
         input_files_bbb = {
             "input": bam_file
         }
 
-        print ("******** Input file for BAM *******", bam_file)
-
-        output_files = {
+        output_files_bbb = {
             "output": bam_filtered
         }
 
         metadata_bbb = {
             "input": Metadata(
-                "data_chipseq", "fastq", [], None,
-                {'assembly': 'test'}),
+                "data_atacseq", "fastq", [], None,
+                {'assembly': 'test'})
         }
 
         bbb = biobambam()
-        bbb.run(input_files_bbb, metadata_bbb, output_files)
+        bb_out, bb_meta = bbb.run(input_files_bbb, metadata_bbb, output_files_bbb)
 
         # Call peaks with macs2
 
-        input_files["bam"] = bam_filtered
+        input_files["bam"] = output_files_bbb["output"]
 
-        output_files = {
+        """output_files = {
             "narrow_peak": output_narrowpeak,
             "summits": output_summits,
             "broad_peak": output_broadpeak,
             "gapped_peak": output_gappedpeak
-        }
+        }"""
 
-        metadata = {
+        metadata_macs = {
             "bam": Metadata(
-                "data_atacseq", "fastq", [], None,
+                bb_meta, [], None,
                 {'assembly': 'test'}),
         }
 
@@ -209,9 +207,11 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             self.configuration["macs_format_param"] = "BEDPE"
 
         macs_handle = macs2(self.configuration)
-        macs_handle.run(input_files, metadata, output_files)
+        macs_out, macs_meta = macs_handle.run(input_files, metadata_macs, output_files)
 
-        print("Summits file: ", output_files["summits"])
+        output_files.update(bt_out)
+        output_files.update(bb_out)
+        output_files.update(macs_out)
 
         #results = compss_wait_on(results)
 
@@ -242,6 +242,10 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
                 }
             )
         }
+
+        output_metadata.update(bt_meta)
+        output_metadata.update(bb_meta)
+        output_metadata.update(macs_meta)
 
         return (output_files, output_metadata)
 
