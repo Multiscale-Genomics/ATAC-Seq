@@ -141,7 +141,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             "index": metadata["index"],
             "loc":  Metadata(
                 "data_atac", "fastq", tg_files["fastq1_trimmed"], None,
-                {"assembly": "test"}
+                {"assembly": "Human"}
                 )
         }
 
@@ -164,35 +164,28 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         bam_filtered = bam_file + "filtered"
 
         input_files_bbb = {
-            "input": bam_file
+            "input": bt_out["bam"]
         }
 
         output_files_bbb = {
             "output": bam_filtered
         }
-
+        
         metadata_bbb = {
-            "input": Metadata(
-                "data_atacseq", "fastq", [], None,
-                {'assembly': 'test'})
-        }
+            "input": bt_meta["bam"]
+            }
 
         bbb = biobambam()
         bb_out, bb_meta = bbb.run(input_files_bbb, metadata_bbb, output_files_bbb)
 
         # Call peaks with macs2
 
-        input_files["bam"] = output_files_bbb["output"]
+        input_files_macs2 = {}
+        input_files_macs2["bam"] = bb_out["bam"]
 
         metadata_macs = {
-            "bam": Metadata(
-                bb_meta, [], None,
-                {'assembly': 'test'}),
+            "bam": bb_meta["bam"]
         }
-
-        print("BAM FILE :", bam_file)
-        print("Output_files :", output_files["narrow_peak"])
-        print("output_narrowPeak :", output_narrowpeak)
 
         self.configuration["macs_nomodel_param"] = True
         self.configuration["macs_keep-dup_param"] = "all"
@@ -201,7 +194,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             self.configuration["macs_format_param"] = "BEDPE"
 
         macs_handle = macs2(self.configuration)
-        macs_out, macs_meta = macs_handle.run(input_files, metadata_macs, output_files)
+        macs_out, macs_meta = macs_handle.run(input_files_macs2, metadata_macs, output_files)
 
         output_files.update(bt_out)
         output_files.update(bb_out)
@@ -212,30 +205,8 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         if results is False:
             logger.fatal("ATAC Seq: run failed")
             return {}, {}
-
-        output_metadata = {
-            "narrow_peak": Metadata(
-                data_type="atacseq",
-                file_type="narrowpeak",
-                file_path=output_files["narrow_peak"],
-                #sources=[input_metadata["narrowpeak"].file_path],
-                #taxon_id=input_metadata["narrowpeak"].taxon_id,
-                meta_data={
-                    "tool": "atac_seq"
-                }
-            ),
-
-            "summits": Metadata(
-                data_type="atacseq",
-                file_type="summits",
-                file_path=output_files["summits"],
-                #sources=[input_metadata["summits"].file_path],
-                #taxon_id=input_metadata["summits"].taxon_id,
-                meta_data={
-                    "tool": "atac_seq"
-                }
-            )
-        }
+        
+        output_metadata = {}
 
         output_metadata.update(bt_meta)
         output_metadata.update(bb_meta)

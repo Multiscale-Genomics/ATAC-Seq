@@ -56,7 +56,7 @@ def test_atac_seq():
         "index": Metadata(
             "index_bwa", "", [genome_fa],
             {
-                "assembly": "test",
+                "assembly": "Human",
                 "tool": "bowtie_indexer"
             }
         ),
