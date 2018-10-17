@@ -104,8 +104,6 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         input_fastq1 = input_files['fastq1']
         fastq1_trimmed = input_fastq1 + '.trimmed'
 
-        output_narrowpeak = output_files['narrow_peak']
-
         results = {}
 
         # Trim Adapters from fastq files.
@@ -170,7 +168,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         output_files_bbb = {
             "output": bam_filtered
         }
-        
+
         metadata_bbb = {
             "input": bt_meta["bam"]
             }
@@ -205,7 +203,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         if results is False:
             logger.fatal("ATAC Seq: run failed")
             return {}, {}
-        
+
         output_metadata = {}
 
         output_metadata.update(bt_meta)
