@@ -53,6 +53,7 @@ def test_atac_seq():
     }
 
     files_out = {
+            "bai": resource_path + "macs2.Human.bam.bai"
             "narrow_peak": resource_path + "atacseq.Human.ERR1659027_peaks.narrowPeak",
             "summits": resource_path + "atacseq.Human.ERR1659027_peaks.summits.bed",
             "broad_peak": resource_path + "atacseq.Human.ERR1659027_peaks.broadPeak",
