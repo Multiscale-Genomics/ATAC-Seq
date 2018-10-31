@@ -188,7 +188,8 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             }
 
         output_files = {
-            "output": fastq_file_1.replace(".fastq", "_bt2.bam")
+            "output": fastq_file_1.replace(".fastq", "_bt2.bam"),
+            "bai": output_files["bai"]
         }
 
         bowtie2_handle = bowtie2AlignerTool()
