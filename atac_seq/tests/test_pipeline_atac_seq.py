@@ -69,5 +69,6 @@ def test_atac_seq():
         "gapped_peak": resource_path + "atacseq.Human.ERR1659027_peaks.gappedPeak"
     }
 
-    atac_handle = process_atac_seq({"execution": resource_path, "tg_paired": True, "macs2_bedpe": False})
+    atac_handle = process_atac_seq({"execution": resource_path, "tg_paired": True, 'macs2_bedpe': False})
     atac_handle.run(files, metadata, files_out)
+

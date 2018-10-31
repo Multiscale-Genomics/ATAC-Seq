@@ -31,7 +31,7 @@
           "name": "fastq1",
           "description": "Input fastq1 file",
           "help": "path to the input fastq1 file",
-          "file_type": [".fastq"],
+          "file_type": ["FASTQ"],
           "data_type": [
               "data_atac_seq"
           ],
@@ -42,7 +42,7 @@
           "name": "fastq2",
           "description": "Input fastq2 file",
           "help": "path to the input fastq2 file",
-          "file_type": [".fastq"],
+          "file_type": ["FASTQ"],
           "data_type": [
               "data_atac_seq"
           ],
@@ -54,6 +54,15 @@
           "description": "Genome sequence file",
           "help": "path to a assembly sequence file",
           "file_type": ["FASTA"],
+          "data_type": ["sequence_genomic", "sequence_dna"],
+          "required": true,
+          "allow_multiple": false
+      },
+      {
+          "name": "index",
+          "description": "Genome index file",
+          "help": "path to an indexed sequence file",
+          "file_type": ["IDX"],
           "data_type": ["sequence_genomic", "sequence_dna"],
           "required": true,
           "allow_multiple": false

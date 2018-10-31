@@ -18,6 +18,7 @@
 from __future__ import print_function
 
 import argparse
+import pdb
 
 from utils import logger
 
@@ -53,6 +54,7 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             configuration = {}
 
         self.configuration.update(configuration)
+        print(self.configuration)
 
     def run(self, input_files, metadata, output_files): # pylint: disable=too-many-locals
         """
@@ -97,14 +99,11 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         output_gappedpeak : str
             Location of the gappedpeak output file
         """
-
         bedpe = self.configuration['macs2_bedpe']
         genome_file = input_files['genome']
 
         input_fastq1 = input_files['fastq1']
         fastq1_trimmed = input_fastq1 + '.trimmed'
-
-        output_narrowpeak = output_files['narrow_peak']
 
         results = {}
 
@@ -127,7 +126,10 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
         self.configuration["tg_length"] = "0"
 
         tg_handle = trimgalore(self.configuration)
-        tg_files, tg_meta = tg_handle.run(input_files_trim, metadata, files_out)
+        #pdb.set_trace()
+        tg_files, tg_meta = tg_handle.run(input_files_trim,
+            metadata, files_out
+        )
 
         # Align the genome file
 
@@ -150,7 +152,8 @@ class process_atac_seq(Workflow):  # pylint: disable=invalid-name
             metadata_bowtie["fastq2"] = tg_meta["fastq2_trimmed"]
 
         output_files_bowtie = {
-            "output": input_fastq1.replace(".fastq", "_bt2.bam")
+            "output": input_fastq1.replace(".fastq", "_bt2.bam"),
+            "bai": output_files["bai"]
         }
 
         bowtie2_handle = bowtie2AlignerTool()
